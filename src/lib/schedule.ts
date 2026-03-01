@@ -73,7 +73,7 @@ export const mockGroups: ScheduleGroup[] = [
 ];
 
 // ─── Mock Schedule (ПЗПІ-23-1, week 1) ───
-const mockLessons: ScheduleLesson[] = [
+export const mockLessons: ScheduleLesson[] = [
   { id: 1, subject: 'Об\'єктно-орієнтоване програмування', type: 'lecture', teacher: 'Дудар З.В.', room: '285', building: 'Д', startTime: '08:30', endTime: '10:05', day: 1, week: 1 },
   { id: 2, subject: 'Бази даних', type: 'practice', teacher: 'Шматков С.І.', room: '415', building: 'Д', startTime: '10:25', endTime: '12:00', day: 1, week: 1 },
   { id: 3, subject: 'Дискретна математика', type: 'lecture', teacher: 'Іванов О.П.', room: '307', building: 'А', startTime: '08:30', endTime: '10:05', day: 2, week: 1 },
