@@ -5,8 +5,8 @@ A comprehensive, high-performance redesign of the **Kharkiv National University 
 
 Conceived as a formal proposal by a 2024 Computer Science alumnus, the project prioritizes performance (Astro 5), accessibility, and headless CMS integration.
 
-🔗 **[View Live Prototype](https://yunglordsimens.github.io/khnure-redesign/)**
-📊 **[View Project Dashboard & Audit](https://yunglordsimens.github.io/khnure-redesign/audit)**
+🔗 **[View Live Prototype](https://nure-site.vercel.app/)**
+📊 **[View Project Dashboard & Audit](https://nure-site.vercel.app/audit)**
 
 ---
 
