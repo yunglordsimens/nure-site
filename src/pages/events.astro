@@ -1,0 +1,94 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { mockEvents, typeColors, typeLabels } from '../lib/events';
+
+const lang = 'uk' as const;
+const now = new Date().toISOString().split('T')[0];
+const upcoming = mockEvents.filter(e => e.date >= now).sort((a, b) => a.date.localeCompare(b.date));
+const past = mockEvents.filter(e => e.date < now).sort((a, b) => b.date.localeCompare(a.date));
+
+function formatDate(d: string): string {
+  return new Date(d).toLocaleDateString('uk-UA', { day: 'numeric', month: 'long' });
+}
+---
+
+<BaseLayout lang={lang} title="Календар подій — ХНУРЕ" description="Заходи, конференції, хакатони та академічні події ХНУРЕ.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Календар подій</span>
+      </nav>
+
+      <div class="pb-8 border-b border-border">
+        <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-3">Календар подій</h1>
+        <p class="text-[0.95rem] text-text-secondary max-w-[480px]">Академічні, наукові та культурні заходи університету.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 py-6">
+        {Object.entries(typeLabels).map(([key, label]) => (
+          <div class="flex items-center gap-2 text-[0.78rem] text-text-muted">
+            <span class={`w-2.5 h-2.5 rounded-full ${typeColors[key]}`}></span>
+            {label.uk}
+          </div>
+        ))}
+      </div>
+
+      {upcoming.length > 0 && (
+        <section class="pb-8">
+          <h2 class="font-mono text-[0.65rem] text-nure-blue uppercase tracking-[0.15em] mb-4">Найближчі події</h2>
+          <div class="space-y-3">
+            {upcoming.map(event => (
+              <div class="border border-border rounded-lg p-5 hover:border-nure-blue/30 transition-colors">
+                <div class="flex items-start gap-4">
+                  <div class="shrink-0 w-14 text-center">
+                    <div class="text-[1.5rem] font-extrabold leading-none">{new Date(event.date).getDate()}</div>
+                    <div class="font-mono text-[0.6rem] text-text-muted uppercase">
+                      {new Date(event.date).toLocaleDateString('uk-UA', { month: 'short' })}
+                    </div>
+                  </div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 mb-1">
+                      <span class={`w-2 h-2 rounded-full shrink-0 ${typeColors[event.type]}`}></span>
+                      <span class="font-mono text-[0.6rem] text-text-muted">{typeLabels[event.type].uk}</span>
+                    </div>
+                    <h3 class="text-[0.95rem] font-semibold">{event.title.uk}</h3>
+                    {event.description && <p class="text-[0.82rem] text-text-secondary mt-1">{event.description.uk}</p>}
+                    <div class="flex flex-wrap gap-3 mt-2 text-[0.72rem] text-text-muted font-mono">
+                      <span>{formatDate(event.date)}{event.endDate ? ` — ${formatDate(event.endDate)}` : ''}</span>
+                      {event.location && <span>📍 {event.location}</span>}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {past.length > 0 && (
+        <section class="py-8 border-t border-border">
+          <h2 class="font-mono text-[0.65rem] text-text-muted uppercase tracking-[0.15em] mb-4">Минулі події</h2>
+          <div class="space-y-2">
+            {past.map(event => (
+              <div class="flex items-center gap-4 py-2 opacity-60">
+                <span class={`w-2 h-2 rounded-full shrink-0 ${typeColors[event.type]}`}></span>
+                <span class="font-mono text-[0.72rem] text-text-muted w-20 shrink-0">{event.date}</span>
+                <span class="text-[0.85rem]">{event.title.uk}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

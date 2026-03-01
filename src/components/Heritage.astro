@@ -1,0 +1,27 @@
+---
+import type { Lang } from '../lib/i18n';
+
+interface Props { lang?: Lang; }
+const { lang = 'uk' } = Astro.props;
+---
+
+<section class="py-14 md:py-16 px-6 lg:px-8 border-b border-border fade-in-up">
+  <div class="max-w-[1320px] mx-auto grid grid-cols-[auto_1fr] gap-8 md:gap-12 items-center">
+    <div class="font-mono text-[4rem] md:text-[4.5rem] font-extrabold text-nure-blue leading-none tracking-tight">
+      1930
+    </div>
+    <div>
+      <div class="font-mono text-[0.65rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">
+        {lang === 'uk' ? 'Історія' : 'Heritage'}
+      </div>
+      <h2 class="text-[1.4rem] md:text-[1.5rem] font-bold tracking-tight mb-3">
+        {lang === 'uk' ? '90+ років інженерної освіти в Харкові' : '90+ years of engineering education in Kharkiv'}
+      </h2>
+      <p class="text-[0.92rem] text-text-secondary leading-relaxed max-w-[560px]">
+        {lang === 'uk'
+          ? 'Від Харківського інституту інженерів будівництва до сучасного університету радіоелектроніки — ХНУРЕ пройшов шлях трансформації, зберігаючи головне: підготовку інженерів, які створюють технології, що працюють.'
+          : 'From the Kharkiv Institute of Civil Engineering to a modern university of radio electronics — NURE has undergone a transformation while preserving what matters: training engineers who build technology that works.'}
+      </p>
+    </div>
+  </div>
+</section>

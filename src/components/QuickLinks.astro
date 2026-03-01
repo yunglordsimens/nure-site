@@ -1,0 +1,66 @@
+---
+import type { Lang } from '../lib/i18n';
+import { t, getLocalePath } from '../lib/i18n';
+
+interface Props { lang?: Lang; }
+const { lang = 'uk' } = Astro.props;
+
+const cards = [
+  {
+    icon: '🎓',
+    title: t('quick.applicant', lang),
+    desc: t('quick.applicant.desc', lang),
+    href: getLocalePath('/applicants', lang),
+  },
+  {
+    icon: '👨‍🎓',
+    title: t('quick.student', lang),
+    desc: t('quick.student.desc', lang),
+    href: getLocalePath('/students', lang),
+  },
+  {
+    icon: '🌍',
+    title: t('quick.international', lang),
+    desc: t('quick.international.desc', lang),
+    href: getLocalePath('/applicants/foreign', lang),
+  },
+  {
+    icon: '🔬',
+    title: t('quick.researcher', lang),
+    desc: t('quick.researcher.desc', lang),
+    href: getLocalePath('/science', lang),
+  },
+];
+---
+
+<section class="py-16 md:py-20 px-6 lg:px-8 fade-in-up">
+  <div class="max-w-[1320px] mx-auto">
+    <div class="mb-8">
+      <div class="font-mono text-[0.65rem] text-nure-blue tracking-[0.15em] uppercase mb-2">
+        {lang === 'uk' ? 'Швидкий доступ' : 'Quick Access'}
+      </div>
+      <h2 class="text-[1.75rem] font-bold tracking-tight">{t('quick.title', lang)}</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      {cards.map(card => (
+        <a
+          href={card.href}
+          class="group relative bg-surface-raised border border-border rounded-2xl p-6 no-underline text-text-primary hover:border-nure-blue hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,71,204,0.08)] transition-all duration-300"
+        >
+          <div class="w-11 h-11 rounded-[10px] bg-nure-blue-muted border border-nure-blue-border flex items-center justify-center text-xl mb-4">
+            {card.icon}
+          </div>
+
+          <h3 class="text-base font-semibold mb-2 leading-snug">{card.title}</h3>
+
+          <p class="text-[0.82rem] text-text-muted leading-relaxed">{card.desc}</p>
+
+          <span class="absolute top-5 right-5 text-text-muted text-sm group-hover:text-nure-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all">
+            ↗
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

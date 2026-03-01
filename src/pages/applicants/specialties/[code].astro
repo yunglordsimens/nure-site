@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import { getAllSpecialtyCodes, getSpecialty } from '../../../lib/specialties';
+import { programs } from '../../../lib/api';
+
+export function getStaticPaths() {
+  return getAllSpecialtyCodes().map(code => ({ params: { code } }));
+}
+
+const { code } = Astro.params;
+const spec = getSpecialty(code);
+if (!spec) return Astro.redirect('/404');
+
+const lang = 'uk';
+
+const degreeLabels: Record<string, string> = {
+  bachelor: 'Бакалаврат',
+  master: 'Магістратура',
+  phd: 'Аспірантура (PhD)',
+};
+---
+
+<BaseLayout
+  lang={lang}
+  title={`${spec.code} ${spec.name.uk} — ХНУРЕ`}
+  description={spec.description.uk}
+>
+  <Header lang={lang} />
+
+  <main class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <a href="/applicants" class="hover:text-nure-blue transition-colors">Абітурієнтам</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">{spec.code} {spec.name.uk}</span>
+      </nav>
+
+      <!-- Header -->
+      <div class="grid lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 pb-12 border-b border-border">
+        <div>
+          <div class="font-mono text-[0.72rem] text-nure-blue tracking-wide mb-2">
+            Спеціальність {spec.code} · {spec.faculty.uk}
+          </div>
+          <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.12] tracking-tight mb-4">
+            {spec.name.uk}
+          </h1>
+          <p class="text-[0.95rem] text-text-secondary leading-relaxed max-w-[580px]">
+            {spec.description.uk}
+          </p>
+
+          <!-- Degree badges -->
+          <div class="flex flex-wrap gap-2 mt-6">
+            {spec.degrees.map(d => (
+              <span class="font-mono text-[0.65rem] tracking-wide px-3 py-1.5 border border-border rounded-md text-text-secondary">
+                {degreeLabels[d]}
+              </span>
+            ))}
+            {spec.languages.includes('en') && (
+              <span class="font-mono text-[0.65rem] tracking-wide px-3 py-1.5 border border-nure-blue-border rounded-md text-nure-blue">
+                English program
+              </span>
+            )}
+          </div>
+        </div>
+
+        <!-- Quick facts card -->
+        <div class="bg-surface-sunken rounded-lg p-6 h-fit">
+          <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-4">Ключові факти</div>
+
+          <div class="space-y-3">
+            <div class="flex justify-between items-baseline">
+              <span class="text-[0.82rem] text-text-muted">Код спеціальності</span>
+              <span class="font-mono text-[0.85rem] font-semibold">{spec.code}</span>
+            </div>
+            <div class="border-b border-border"></div>
+
+            <div class="flex justify-between items-baseline">
+              <span class="text-[0.82rem] text-text-muted">Бакалаврат</span>
+              <span class="font-mono text-[0.82rem]">{spec.duration.bachelor} · {spec.credits.bachelor} ECTS</span>
+            </div>
+            <div class="border-b border-border"></div>
+
+            <div class="flex justify-between items-baseline">
+              <span class="text-[0.82rem] text-text-muted">Магістратура</span>
+              <span class="font-mono text-[0.82rem]">{spec.duration.master} · {spec.credits.master} ECTS</span>
+            </div>
+            {spec.duration.phd && (
+              <>
+                <div class="border-b border-border"></div>
+                <div class="flex justify-between items-baseline">
+                  <span class="text-[0.82rem] text-text-muted">PhD</span>
+                  <span class="font-mono text-[0.82rem]">{spec.duration.phd}</span>
+                </div>
+              </>
+            )}
+            <div class="border-b border-border"></div>
+
+            <div class="flex justify-between items-baseline">
+              <span class="text-[0.82rem] text-text-muted">Факультет</span>
+              <span class="font-mono text-[0.82rem]">{spec.facultyCode}</span>
+            </div>
+          </div>
+
+          <a
+            href="/applicants"
+            class="block text-center mt-6 py-2.5 bg-nure-blue text-white text-[0.85rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-colors"
+          >
+            Подати документи →
+          </a>
+        </div>
+      </div>
+
+      <!-- Content sections -->
+      <div class="grid lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 py-12">
+        <div class="space-y-10">
+
+          <!-- Career paths -->
+          <section>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Кар'єра</div>
+            <h2 class="text-[1.25rem] font-bold tracking-tight mb-4">Ким працюють випускники</h2>
+            <div class="grid sm:grid-cols-2 gap-2">
+              {spec.careers.uk.map(career => (
+                <div class="flex items-center gap-2.5 py-2 px-3 border border-border rounded-md">
+                  <span class="w-1.5 h-1.5 rounded-[1px] bg-nure-blue shrink-0"></span>
+                  <span class="text-[0.85rem]">{career}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <!-- Skills -->
+          <section>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Компетенції</div>
+            <h2 class="text-[1.25rem] font-bold tracking-tight mb-4">Що ви вивчите</h2>
+            <div class="space-y-2">
+              {spec.skills.uk.map(skill => (
+                <div class="flex items-start gap-3 py-2">
+                  <span class="font-mono text-[0.7rem] text-nure-blue mt-0.5">→</span>
+                  <span class="text-[0.88rem] text-text-secondary">{skill}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <!-- Key subjects -->
+          <section>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Навчальний план</div>
+            <h2 class="text-[1.25rem] font-bold tracking-tight mb-4">Ключові дисципліни</h2>
+            <div class="grid sm:grid-cols-2 gap-x-4 gap-y-1">
+              {spec.subjects.uk.map((subj, i) => (
+                <div class="flex items-baseline gap-2.5 py-1.5 border-b border-border">
+                  <span class="font-mono text-[0.6rem] text-text-muted w-5 shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                  <span class="text-[0.85rem]">{subj}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Contact -->
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Контакти кафедри</div>
+            <div class="text-[0.88rem] font-semibold mb-1">{spec.contacts.department.uk}</div>
+            <div class="text-[0.82rem] text-text-muted mb-3">{spec.contacts.head.uk}</div>
+            <div class="space-y-1.5">
+              <a href={`mailto:${spec.contacts.email}`} class="block text-[0.82rem] text-nure-blue hover:underline font-mono">{spec.contacts.email}</a>
+              <a href={`tel:${spec.contacts.phone.replace(/\s/g, '')}`} class="block text-[0.82rem] text-text-muted font-mono">{spec.contacts.phone}</a>
+            </div>
+          </div>
+
+          <!-- Related specialties -->
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Схожі спеціальності</div>
+            <div class="space-y-2">
+              {programs
+                .filter(p => p.code !== spec.code)
+                .slice(0, 3)
+                .map(p => (
+                  <a
+                    href={`/applicants/specialties/${p.code}`}
+                    class="flex items-baseline gap-2 py-1.5 text-[0.82rem] hover:text-nure-blue transition-colors group"
+                  >
+                    <span class="font-mono text-[0.68rem] text-text-muted group-hover:text-nure-blue">{p.code}</span>
+                    <span>{p.name.uk}</span>
+                  </a>
+                ))}
+            </div>
+          </div>
+
+          <!-- Downloads placeholder -->
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Документи</div>
+            <div class="space-y-2">
+              <a href="#" class="flex items-center gap-2 text-[0.82rem] text-text-secondary hover:text-nure-blue transition-colors">
+                <span class="font-mono text-[0.7rem]">PDF</span>
+                Освітня програма (бакалаврат)
+              </a>
+              <a href="#" class="flex items-center gap-2 text-[0.82rem] text-text-secondary hover:text-nure-blue transition-colors">
+                <span class="font-mono text-[0.7rem]">PDF</span>
+                Навчальний план
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

@@ -1,0 +1,152 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk' as const;
+
+const sections = [
+  {
+    title: 'Як додати новину',
+    steps: [
+      'Увійдіть до WordPress адмін-панелі: nure.ua/wp-admin',
+      'Записи → Додати новий запис',
+      'Заповніть заголовок та текст новини',
+      'Додайте зображення (мін. 1200×630px для OG)',
+      'Оберіть категорію: Rankings / Science / Events / University',
+      'Натисніть «Опублікувати» — сайт оновиться автоматично через webhook',
+    ],
+  },
+  {
+    title: 'Як оновити інформацію про спеціальність',
+    steps: [
+      'Дані спеціальностей зберігаються у файлі src/lib/specialties.ts',
+      'Для оновлення потрібен розробник або pull request у GitHub',
+      'Кожна спеціальність має: код, назву, опис, кар\'єри, навички, предмети, контакти',
+      'Після змін сайт автоматично перебудується',
+    ],
+  },
+  {
+    title: 'Як додати подію в календар',
+    steps: [
+      'Поточні події зберігаються у src/lib/events.ts',
+      'Для live-інтеграції: підключити WordPress Events Calendar або Google Calendar API',
+      'Формат події: назва, дата, тип, опис, локація',
+      'Типи: academic, admission, science, culture, sport',
+    ],
+  },
+  {
+    title: 'Вимоги до зображень',
+    steps: [
+      'Формати: WebP (пріоритет), JPEG, PNG',
+      'Hero-зображення: 1920×800px, WebP, < 200KB',
+      'Новини: 1200×630px (оптимально для OG-тегів)',
+      'Логотипи партнерів: SVG, 200×80px viewport',
+      'Фото факультетів: 800×600px, WebP',
+      'Усі зображення — у /public/images/',
+    ],
+  },
+  {
+    title: 'Технічна архітектура',
+    steps: [
+      'Framework: Astro 5 (Static Site Generator)',
+      'Стилі: Tailwind CSS 4 з CSS custom properties',
+      'Дані: TypeScript data layers + WordPress REST API',
+      'Розклад: CIST API (cist.nure.ua)',
+      'Деплой: Vercel (або Netlify) з auto-rebuild через webhook',
+      'Мови: Українська (основна) + English',
+    ],
+  },
+];
+---
+
+<BaseLayout lang={lang} title="Документація — ХНУРЕ" description="Інструкція для контент-менеджерів сайту ХНУРЕ.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Документація</span>
+      </nav>
+
+      <div class="pb-8 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Для контент-менеджерів</div>
+        <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-3">Документація</h1>
+        <p class="text-[0.95rem] text-text-secondary max-w-[520px]">Інструкції з управління контентом сайту. Для технічних питань звертайтеся до розробника.</p>
+      </div>
+
+      <div class="py-8 space-y-8">
+        {sections.map((section, si) => (
+          <div class="border border-border rounded-lg overflow-hidden">
+            <div class="bg-surface-sunken px-6 py-4 border-b border-border flex items-center gap-3">
+              <span class="font-mono text-[0.72rem] text-nure-blue font-bold">{String(si + 1).padStart(2, '0')}</span>
+              <h2 class="text-[1rem] font-bold">{section.title}</h2>
+            </div>
+            <div class="px-6 py-4">
+              <ol class="space-y-2.5">
+                {section.steps.map((step, i) => (
+                  <li class="flex gap-3 text-[0.88rem] text-text-secondary">
+                    <span class="font-mono text-[0.65rem] text-text-muted shrink-0 mt-1">{i + 1}.</span>
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <section class="py-8 border-t border-border">
+        <h2 class="text-[1.1rem] font-bold mb-4">Середовища</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-[0.85rem]">
+            <thead>
+              <tr class="border-b border-border text-left">
+                <th class="py-2 pr-4 font-mono text-[0.7rem] text-text-muted">Середовище</th>
+                <th class="py-2 pr-4 font-mono text-[0.7rem] text-text-muted">URL</th>
+                <th class="py-2 font-mono text-[0.7rem] text-text-muted">Опис</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              <tr>
+                <td class="py-2.5 pr-4 font-semibold">Production</td>
+                <td class="py-2.5 pr-4 font-mono text-nure-blue">nure.ua</td>
+                <td class="py-2.5 text-text-secondary">Основний сайт</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 pr-4 font-semibold">Preview</td>
+                <td class="py-2.5 pr-4 font-mono text-nure-blue">preview.nure.ua</td>
+                <td class="py-2.5 text-text-secondary">Попередній перегляд (Vercel preview)</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 pr-4 font-semibold">WordPress</td>
+                <td class="py-2.5 pr-4 font-mono text-nure-blue">nure.ua/wp-admin</td>
+                <td class="py-2.5 text-text-secondary">CMS для новин та контенту</td>
+              </tr>
+              <tr>
+                <td class="py-2.5 pr-4 font-semibold">Webhook</td>
+                <td class="py-2.5 pr-4 font-mono text-nure-blue">nure.ua/api/webhook</td>
+                <td class="py-2.5 text-text-secondary">Auto-rebuild endpoint (GET = status)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="py-8 border-t border-border">
+        <h2 class="text-[1.1rem] font-bold mb-4">Переключення mock / live</h2>
+        <div class="bg-surface-sunken rounded-lg p-5 font-mono text-[0.78rem]">
+          <div class="text-text-muted mb-1"># .env</div>
+          <div><span class="text-nure-blue">PUBLIC_USE_MOCK</span>=<span class="text-green-600 dark:text-green-400">true</span>  <span class="text-text-muted"># mock-дані (за замовчуванням)</span></div>
+          <div><span class="text-nure-blue">PUBLIC_USE_MOCK</span>=<span class="text-orange-600 dark:text-orange-400">false</span> <span class="text-text-muted"># live WordPress API</span></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

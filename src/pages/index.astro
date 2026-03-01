@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import QuickLinks from '../components/QuickLinks.astro';
+import News from '../components/News.astro';
+import Programs from '../components/Programs.astro';
+import Heritage from '../components/Heritage.astro';
+import Partners from '../components/Partners.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk';
+---
+
+<BaseLayout lang={lang}>
+  <Header lang={lang} />
+  <main id="main-content">
+    <Hero lang={lang} />
+    <Stats lang={lang} />
+    <QuickLinks lang={lang} />
+    <News lang={lang} />
+    <Programs lang={lang} />
+    <Heritage lang={lang} />
+    <Partners lang={lang} />
+  </main>
+  <Footer lang={lang} />
+</BaseLayout>

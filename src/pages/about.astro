@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { faculties as facultyData } from '../lib/faculties';
+
+const lang = 'uk' as const;
+const facultyList = Object.entries(facultyData);
+
+const milestones = [
+  { year: '1930', event: 'Заснування Харківського інституту інженерів будівництва' },
+  { year: '1962', event: 'Реорганізація в Харківський інститут радіоелектроніки (ХІРЕ)' },
+  { year: '1993', event: 'Статус національного технічного університету' },
+  { year: '2001', event: 'Перейменування в ХНУРЕ — Харківський національний університет радіоелектроніки' },
+  { year: '2020', event: 'Перші позиції в QS World University Rankings' },
+  { year: '2024', event: 'Науковий журнал ITSSI прийнято до Scopus' },
+  { year: '2026', event: 'QS Europe 2026 — серед найкращих університетів Європи' },
+];
+---
+
+<BaseLayout lang={lang} title="Про університет — ХНУРЕ" description="Харківський національний університет радіоелектроніки — 90+ років інженерної освіти, 7000+ студентів, міжнародні рейтинги.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Про університет</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-[1fr_400px] gap-10 lg:gap-16 pb-12 border-b border-border">
+        <div>
+          <div class="font-mono text-[0.72rem] text-nure-blue tracking-wide mb-2">Про ХНУРЕ</div>
+          <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-4">
+            Інженерна школа<br>з <span class="text-nure-blue">1930</span> року
+          </h1>
+          <p class="text-[0.95rem] text-text-secondary leading-relaxed max-w-[520px] mb-4">
+            Харківський національний університет радіоелектроніки — один з провідних технічних ЗВО України. Ми готуємо інженерів у галузі IT, радіоелектроніки, кібербезпеки та автоматизації, яких наймають найбільші tech-компанії світу.
+          </p>
+          <p class="text-[0.88rem] text-text-muted leading-relaxed max-w-[520px]">
+            Університет входить до міжнародних рейтингів QS та THE, має публікації у Scopus, та розвиває партнерства з EPAM, GlobalLogic, Microsoft, Cisco та іншими лідерами індустрії.
+          </p>
+        </div>
+
+        <div class="rounded-xl overflow-hidden aspect-[4/3] bg-gradient-to-br from-[#111128] via-[#0f2240] to-[#0a1a30] relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-white/[0.05] text-3xl font-extrabold tracking-wider">ХНУРЕ</span>
+          </div>
+          <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+            <span class="font-mono text-[0.6rem] text-white/50">Головний корпус · пр. Науки, 14</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 py-10 border-b border-border">
+        <div class="text-center">
+          <div class="font-mono text-[2.5rem] font-extrabold text-nure-blue leading-none">90+</div>
+          <div class="text-[0.78rem] text-text-muted mt-1">років історії</div>
+        </div>
+        <div class="text-center">
+          <div class="font-mono text-[2.5rem] font-extrabold leading-none">7 000+</div>
+          <div class="text-[0.78rem] text-text-muted mt-1">студентів</div>
+        </div>
+        <div class="text-center">
+          <div class="font-mono text-[2.5rem] font-extrabold leading-none">6</div>
+          <div class="text-[0.78rem] text-text-muted mt-1">факультетів</div>
+        </div>
+        <div class="text-center">
+          <div class="font-mono text-[2.5rem] font-extrabold leading-none">40+</div>
+          <div class="text-[0.78rem] text-text-muted mt-1">спеціальностей</div>
+        </div>
+      </div>
+
+      <section class="py-12 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Історія</div>
+        <h2 class="text-[1.5rem] font-bold tracking-tight mb-8">Ключові етапи</h2>
+        <div class="space-y-0">
+          {milestones.map(m => (
+            <div class="grid grid-cols-[80px_1fr] gap-4 py-3 border-b border-border last:border-b-0">
+              <span class="font-mono text-[0.85rem] font-semibold text-nure-blue">{m.year}</span>
+              <span class="text-[0.88rem] text-text-secondary">{m.event}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-12 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Структура</div>
+        <h2 class="text-[1.5rem] font-bold tracking-tight mb-6">Факультети</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {facultyList.map(([key, f]) => (
+            <a href={`/faculties/${key}`} class="border border-border rounded-lg p-5 hover:border-nure-blue hover:-translate-y-0.5 transition-all relative group">
+              <div class="font-mono text-[0.65rem] text-nure-blue tracking-wider mb-1">{f.code}</div>
+              <h3 class="text-[0.95rem] font-semibold leading-snug mb-1.5">{f.fullName.uk}</h3>
+              <div class="text-[0.78rem] text-text-muted">{f.departments.length} кафедр · {f.specialties.length} спеціальностей</div>
+              <span class="absolute top-4 right-4 text-text-muted/30 group-hover:text-nure-blue transition-colors">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-12 border-b border-border">
+        <div class="grid lg:grid-cols-2 gap-10">
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Місія</div>
+            <h2 class="text-[1.5rem] font-bold tracking-tight mb-4">Технології, що працюють</h2>
+            <p class="text-[0.92rem] text-text-secondary leading-relaxed mb-3">
+              ХНУРЕ готує інженерів для реального світу. Наші випускники не просто знають теорію — вони будують системи, які працюють у продакшені найбільших компаній України та світу.
+            </p>
+            <p class="text-[0.92rem] text-text-secondary leading-relaxed">
+              Ми розвиваємо наукові дослідження, публікуємося у Scopus, беремо участь у міжнародних програмах Erasmus+ та підтримуємо стартап-культуру серед студентів.
+            </p>
+          </div>
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Партнерства</div>
+            <h2 class="text-[1.5rem] font-bold tracking-tight mb-4">Наші партнери працевлаштовують наших випускників</h2>
+            <div class="grid grid-cols-3 gap-3">
+              {['Microsoft', 'EPAM', 'GlobalLogic', 'Cisco', 'SoftServe', 'Sigma', 'NIX', 'Gameloft', 'DataArt'].map(p => (
+                <div class="flex items-center justify-center h-14 border border-border rounded-md text-[0.78rem] text-text-muted font-medium">
+                  {p}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Акредитація</div>
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-4">Визнання та рейтинги</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.5rem] font-bold text-nure-blue">QS</div>
+            <div class="text-[0.82rem] text-text-secondary mt-1">World University Rankings: Europe 2026</div>
+          </div>
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.5rem] font-bold text-nure-blue">THE</div>
+            <div class="text-[0.82rem] text-text-secondary mt-1">Times Higher Education Subject Rankings</div>
+          </div>
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.5rem] font-bold text-nure-blue">Scopus</div>
+            <div class="text-[0.82rem] text-text-secondary mt-1">Науковий журнал ITSSI категорії А</div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

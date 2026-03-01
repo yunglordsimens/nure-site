@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk' as const;
+
+const quickLinks = [
+  { title: 'Розклад занять', desc: 'Актуальний розклад для всіх груп', url: 'https://cist.nure.ua/', external: true },
+  { title: 'ЄДЕБО', desc: 'Електронний кабінет студента', url: 'https://cabinet.edbo.gov.ua/', external: true },
+  { title: 'Moodle', desc: 'Система дистанційного навчання', url: 'https://dl.nure.ua/', external: true },
+  { title: 'Бібліотека', desc: 'Каталог, електронні ресурси', url: '#library' },
+  { title: 'Академічна мобільність', desc: 'Erasmus+, обмінні програми', url: '#mobility' },
+  { title: 'Стипендії', desc: 'Умови та розміри', url: '#scholarships' },
+];
+
+const services = [
+  { title: 'Гуртожитки', desc: 'ХНУРЕ має 5 гуртожитків для студентів. Заселення відбувається на підставі наказу ректора. Вартість проживання — від 350 грн/місяць.', contact: 'Студмістечко: +380 57 702 16 45' },
+  { title: 'Медпункт', desc: 'Медичний пункт працює у корпусі А. Надання першої медичної допомоги, профілактичні огляди, довідки.', contact: 'Корпус А, кім. 103 · Пн–Пт 8:00–16:00' },
+  { title: 'Спортивний комплекс', desc: 'Спортзал, басейн, стадіон. Секції з футболу, баскетболу, волейболу, плавання, легкої атлетики.', contact: 'Спорткомплекс · вул. Бакуліна, 12' },
+  { title: 'Психологічна підтримка', desc: 'Конфіденційні консультації з психологом університету. Підтримка у стресових ситуаціях та адаптації.', contact: 'Корпус А, кім. 215 · за записом' },
+];
+---
+
+<BaseLayout lang={lang} title="Студентам — ХНУРЕ" description="Ресурси для студентів ХНУРЕ — розклад, ЄДЕБО, бібліотека, гуртожитки, стипендії.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Студентам</span>
+      </nav>
+
+      <div class="pb-10 border-b border-border">
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-4">Студентам</h1>
+        <p class="text-[1rem] text-text-secondary leading-relaxed max-w-[520px]">
+          Розклад, навчальні системи, бібліотека, гуртожитки та інші ресурси для студентів ХНУРЕ.
+        </p>
+      </div>
+
+      <section class="py-10 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Швидкий доступ</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Основні сервіси</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {quickLinks.map(link => (
+            <a href={link.url} target={link.external ? '_blank' : undefined} rel={link.external ? 'noopener' : undefined}
+              class="group border border-border rounded-lg p-5 hover:border-nure-blue hover:-translate-y-0.5 transition-all relative">
+              <h3 class="text-[0.95rem] font-semibold mb-1">{link.title}</h3>
+              <p class="text-[0.82rem] text-text-muted">{link.desc}</p>
+              <span class="absolute top-4 right-4 text-text-muted/30 group-hover:text-nure-blue transition-colors">{link.external ? '↗' : '→'}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-10 border-b border-border" id="library">
+        <div class="grid lg:grid-cols-2 gap-10">
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Бібліотека</div>
+            <h2 class="text-[1.35rem] font-bold tracking-tight mb-4">Наукова бібліотека ХНУРЕ</h2>
+            <p class="text-[0.9rem] text-text-secondary leading-relaxed mb-3">
+              Фонд понад 500 000 примірників. Електронний каталог, доступ до міжнародних баз даних IEEE Xplore, Scopus, Web of Science. Читальні зали з Wi-Fi.
+            </p>
+            <div class="space-y-1.5 text-[0.85rem] text-text-secondary">
+              <p>Корпус Б, 1-й поверх</p>
+              <p class="font-mono text-nure-blue">library@nure.ua</p>
+              <p class="text-text-muted text-[0.78rem]">Пн–Пт: 8:00–18:00, Сб: 9:00–14:00</p>
+            </div>
+          </div>
+          <div id="mobility">
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Мобільність</div>
+            <h2 class="text-[1.35rem] font-bold tracking-tight mb-4">Erasmus+ та обмінні програми</h2>
+            <p class="text-[0.9rem] text-text-secondary leading-relaxed mb-3">
+              ХНУРЕ має партнерства з університетами Європи в рамках програми Erasmus+. Студенти можуть провести семестр або рік навчання за кордоном з фінансуванням.
+            </p>
+            <div class="space-y-1.5 text-[0.85rem] text-text-secondary">
+              <p>Міжнародний відділ · Корпус А, кім. 321</p>
+              <p class="font-mono text-nure-blue">international@nure.ua</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10 border-b border-border" id="scholarships">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Фінансування</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Стипендії</h2>
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.25rem] font-bold text-nure-blue">1 600 ₴</div>
+            <div class="text-[0.85rem] font-medium mt-1">Звичайна стипендія</div>
+            <div class="text-[0.75rem] text-text-muted mt-0.5">для студентів бюджетної форми</div>
+          </div>
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.25rem] font-bold text-nure-blue">2 560 ₴</div>
+            <div class="text-[0.85rem] font-medium mt-1">Підвищена стипендія</div>
+            <div class="text-[0.75rem] text-text-muted mt-0.5">за відмінне навчання</div>
+          </div>
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.25rem] font-bold text-nure-blue">3 200 ₴</div>
+            <div class="text-[0.85rem] font-medium mt-1">Академічна стипендія</div>
+            <div class="text-[0.75rem] text-text-muted mt-0.5">за наукові досягнення</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-10">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Послуги</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Студентське життя</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {services.map(s => (
+            <div class="border border-border rounded-lg p-5">
+              <h3 class="text-[0.95rem] font-semibold mb-2">{s.title}</h3>
+              <p class="text-[0.85rem] text-text-secondary leading-relaxed mb-2">{s.desc}</p>
+              <p class="font-mono text-[0.72rem] text-text-muted">{s.contact}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

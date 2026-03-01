@@ -1,0 +1,85 @@
+---
+import type { Lang } from '../lib/i18n';
+import { t, getLocalePath } from '../lib/i18n';
+
+interface Props { lang?: Lang; }
+const { lang = 'uk' } = Astro.props;
+---
+
+<footer class="bg-surface-dark text-text-inverse pt-14 pb-6 px-6 lg:px-8">
+  <div class="max-w-[1320px] mx-auto">
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr] gap-8 lg:gap-12 pb-10 border-b border-white/10">
+
+      <div>
+        <a href={getLocalePath('/', lang)} class="flex items-center gap-3 no-underline mb-5">
+          <img src="/images/logo-yellow.svg" alt="ХНУРЕ" class="w-10 h-10 shrink-0" onerror="this.outerHTML='<div class=\'w-10 h-10 bg-[#FFD500] rounded-[8px] flex items-center justify-center text-[#0B0B0F] font-extrabold text-base\'>N</div>'" />
+          <div class="flex flex-col leading-tight">
+            <span class="font-bold text-[1.1rem] text-white">{t('meta.university.short', lang)}</span>
+            <span class="text-[0.58rem] text-white/50">{t('meta.university.full', lang)}</span>
+          </div>
+        </a>
+        <div class="text-[0.85rem] text-white/40 leading-relaxed">
+          {lang === 'uk' ? 'пр. Науки, 14, Харків, 61166, Україна' : 'Nauky Ave. 14, Kharkiv, 61166, Ukraine'}<br />
+          <a href="mailto:info@nure.ua" class="text-white/40 hover:text-white/70 transition-colors no-underline">info@nure.ua</a><br />
+          <a href="tel:+380577021013" class="text-white/40 hover:text-white/70 transition-colors no-underline">+380 57 702 10 13</a>
+        </div>
+
+        <div class="mt-5">
+          <img src="/images/mon.svg" alt="Міністерство освіти і науки України" class="h-8 w-auto opacity-30" loading="lazy" onerror="this.outerHTML='<span class=\'text-[0.7rem] text-white/30\'>Міністерство освіти і науки України</span>'" />
+        </div>
+      </div>
+
+      <div>
+        <div class="font-mono text-[0.65rem] text-white/30 uppercase tracking-[0.15em] mb-4">
+          {t('footer.applicants', lang)}
+        </div>
+        <ul class="space-y-2 list-none">
+          <li><a href={getLocalePath('/applicants', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.programs', lang)}</a></li>
+          <li><a href={getLocalePath('/applicants/foreign', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.foreign', lang)}</a></li>
+          <li><a href={getLocalePath('/applicants/english', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.english', lang)}</a></li>
+          <li><a href={getLocalePath('/applicants/prep', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.prep', lang)}</a></li>
+          <li><a href={getLocalePath('/applicants/faq', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.faq', lang)}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="font-mono text-[0.65rem] text-white/30 uppercase tracking-[0.15em] mb-4">
+          {t('footer.university', lang)}
+        </div>
+        <ul class="space-y-2 list-none">
+          <li><a href={getLocalePath('/about', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.about', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.structure', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.rankings', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.international', lang)}</a></li>
+          <li><a href={getLocalePath('/contacts', lang)} class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('nav.contacts', lang)}</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="font-mono text-[0.65rem] text-white/30 uppercase tracking-[0.15em] mb-4">
+          {t('footer.students', lang)}
+        </div>
+        <ul class="space-y-2 list-none">
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.timetable', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.campus', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.library', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.employment', lang)}</a></li>
+          <li><a href="#" class="text-white/55 text-[0.85rem] hover:text-white transition-colors no-underline">{t('footer.distance', lang)}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center justify-between pt-6 gap-4">
+      <span class="text-[0.75rem] text-white/25">
+        © ХНУРЕ, 2001–2026. {t('footer.rights', lang)}
+      </span>
+      <div class="flex gap-5">
+        <a href="https://www.tiktok.com/@nure.official" target="_blank" rel="noopener" class="text-white/30 text-[0.8rem] hover:text-white transition-colors no-underline">TikTok</a>
+        <a href="https://www.youtube.com/channel/UCFwYsa2_dfuRroZPF8v3ZjA" target="_blank" rel="noopener" class="text-white/30 text-[0.8rem] hover:text-white transition-colors no-underline">YouTube</a>
+        <a href="#" class="text-white/30 text-[0.8rem] hover:text-white transition-colors no-underline">Facebook</a>
+        <a href="#" class="text-white/30 text-[0.8rem] hover:text-white transition-colors no-underline">Telegram</a>
+      </div>
+    </div>
+  </div>
+</footer>

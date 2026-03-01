@@ -1,0 +1,40 @@
+---
+interface Props {
+  type?: 'text' | 'card' | 'image' | 'table-row';
+  lines?: number;
+  class?: string;
+}
+const { type = 'text', lines = 3, class: className = '' } = Astro.props;
+---
+
+{type === 'text' && (
+  <div class={`space-y-2.5 animate-pulse ${className}`}>
+    {Array.from({ length: lines }).map((_, i) => (
+      <div class={`h-3 bg-surface-sunken rounded ${i === lines - 1 ? 'w-2/3' : 'w-full'}`}></div>
+    ))}
+  </div>
+)}
+
+{type === 'card' && (
+  <div class={`border border-border rounded-lg p-5 animate-pulse ${className}`}>
+    <div class="h-3 w-16 bg-surface-sunken rounded mb-3"></div>
+    <div class="h-4 w-3/4 bg-surface-sunken rounded mb-2"></div>
+    <div class="h-3 w-1/2 bg-surface-sunken rounded"></div>
+  </div>
+)}
+
+{type === 'image' && (
+  <div class={`bg-surface-sunken rounded-lg animate-pulse aspect-[16/9] ${className}`}></div>
+)}
+
+{type === 'table-row' && (
+  <div class={`animate-pulse ${className}`}>
+    {Array.from({ length: lines }).map(() => (
+      <div class="grid grid-cols-[80px_1fr_100px] gap-4 py-3 border-b border-border">
+        <div class="h-3 bg-surface-sunken rounded"></div>
+        <div class="h-3 bg-surface-sunken rounded w-2/3"></div>
+        <div class="h-3 bg-surface-sunken rounded w-1/2"></div>
+      </div>
+    ))}
+  </div>
+)}

@@ -1,0 +1,446 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { programs } from '../../lib/api';
+
+const lang = 'uk' as const;
+
+const degreeLabels: Record<string, string> = {
+  bachelor: 'Бакалаврат',
+  master: 'Магістратура',
+  phd: 'PhD',
+};
+
+const steps = [
+  {
+    num: '01',
+    title: 'Обери спеціальність',
+    desc: 'Ознайомся з переліком спеціальностей, навчальними планами та кар\'єрними перспективами. Зверни увагу на конкурсні предмети НМТ/ЗНО.',
+    action: { label: 'Переглянути спеціальності ↓', href: '#specialties' },
+  },
+  {
+    num: '02',
+    title: 'Перевір вимоги',
+    desc: 'Дізнайся мінімальний бал НМТ/ЗНО, перелік документів та терміни подання. Для магістратури — вимоги до диплома бакалавра та вступного іспиту.',
+    action: { label: 'Вимоги та бали ↓', href: '#requirements' },
+  },
+  {
+    num: '03',
+    title: 'Подай заяву онлайн',
+    desc: 'Реєстрація в системі ЄДЕБО та подання електронної заяви. Можна подати до 5 заяв на різні спеціальності ХНУРЕ.',
+    action: { label: 'Система ЄДЕБО →', href: 'https://vstup.edbo.gov.ua/' },
+  },
+  {
+    num: '04',
+    title: 'Подай документи',
+    desc: 'Принеси оригінали або завірені копії до приймальної комісії. Перелік: паспорт, атестат/диплом, сертифікати НМТ/ЗНО, фото 3×4.',
+    action: { label: 'Адреса комісії ↓', href: '#contacts' },
+  },
+  {
+    num: '05',
+    title: 'Очікуй результати',
+    desc: 'Рейтингові списки публікуються на сайті ЄДЕБО та на сайті ХНУРЕ. Після зарахування — отримай студентський квиток та розклад.',
+    action: null,
+  },
+];
+
+const requirements = {
+  bachelor: {
+    id: 'bachelor',
+    title: 'Бакалаврат',
+    items: [
+      'Атестат про повну загальну середню освіту',
+      'Сертифікати НМТ/ЗНО (українська мова + 2 профільні предмети)',
+      'Мінімальний бал НМТ — від 100 балів (залежить від спеціальності)',
+      'Паспорт громадянина України',
+      'Фотографії 3×4 (6 шт.)',
+      'Медична довідка (форма 086-о)',
+    ],
+  },
+  master: {
+    id: 'master',
+    title: 'Магістратура',
+    items: [
+      'Диплом бакалавра або спеціаліста',
+      'Вступний іспит зі спеціальності або ЄВІ',
+      'Паспорт громадянина України',
+      'Фотографії 3×4 (6 шт.)',
+    ],
+  },
+  foreign: {
+    id: 'foreign',
+    title: 'Іноземні студенти',
+    items: [
+      'Копія паспорта (легалізована)',
+      'Документ про освіту (нострифікований)',
+      'Медичний сертифікат',
+      'Страховий поліс',
+      'Запрошення на навчання від ХНУРЕ',
+    ],
+  },
+};
+
+const dates = [
+  { period: '1 липня', event: 'Початок прийому заяв' },
+  { period: '18 липня', event: 'Закінчення реєстрації на НМТ' },
+  { period: '31 липня', event: 'Закінчення подання заяв (бакалаврат)' },
+  { period: '5 серпня', event: 'Оприлюднення рейтингових списків' },
+  { period: '10 серпня', event: 'Виконання вимог до зарахування' },
+  { period: '1 вересня', event: 'Початок навчання' },
+];
+---
+
+<BaseLayout lang={lang} title="Абітурієнтам — ХНУРЕ" description="Вступна кампанія ХНУРЕ. Спеціальності, вимоги, документи та покроковий процес вступу.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <!-- Breadcrumb -->
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Абітурієнтам</span>
+      </nav>
+
+      <!-- ═══ HERO with CTAs ═══ -->
+      <div class="pb-10 border-b border-border">
+        <div class="font-mono text-[0.72rem] text-nure-blue tracking-wide mb-2">Вступна кампанія 2026</div>
+        <h1 class="text-[clamp(2rem,4vw,3rem)] font-extrabold leading-[1.1] tracking-tight mb-4">
+          Твій шлях до <span class="text-nure-blue">ХНУРЕ</span>
+        </h1>
+        <p class="text-[1.05rem] text-text-secondary leading-relaxed max-w-[560px] mb-6">
+          Покроковий процес вступу — від вибору спеціальності до зарахування. Бакалаврат, магістратура та програми для іноземних студентів.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="https://vstup.edbo.gov.ua/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-nure-blue text-white text-[0.88rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-all">
+            Подати заяву (ЄДЕБО) ↗
+          </a>
+          <a href="#specialties" class="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-[0.88rem] font-semibold rounded-md hover:border-nure-blue hover:text-nure-blue transition-all">
+            Переглянути спеціальності ↓
+          </a>
+        </div>
+      </div>
+
+<!-- ═══ 5 STEPS — Perfect Timeline ═══ -->
+<section class="py-12 border-b border-border">
+  <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Процес вступу</div>
+  <h2 class="text-[1.5rem] font-bold tracking-tight mb-8">5 кроків до зарахування</h2>
+
+  <div class="relative">
+    <!-- Вертикальна лінія (ідеально по центру між цифрами і контентом) -->
+    <div class="absolute left-[80px] md:left-[100px] top-0 bottom-0 w-px bg-border" aria-hidden="true"></div>
+
+    <div class="space-y-0">
+      {steps.map((step, i) => (
+        <div class="relative grid grid-cols-[80px_1fr] md:grid-cols-[100px_1fr_200px] py-8 border-b border-border last:border-b-0">
+          <!-- Цифра (ідеально вирівняна по центру рядка) -->
+          <div class="flex items-center h-full">
+            <div class="font-mono text-[2rem] md:text-[2.5rem] font-extrabold text-nure-blue/15 leading-none w-full text-right pr-6 md:pr-8">
+              {step.num}
+            </div>
+          </div>
+
+          <!-- Точка на лінії (ідеально по центру рядка) -->
+          <div class="absolute left-[80px] md:left-[100px] top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div class="w-3 h-3 rounded-full bg-nure-blue border-2 border-white shadow-sm"></div>
+          </div>
+
+          <!-- Контент (ідеально вирівняний по центру з точкою) -->
+          <div class="pl-6 md:pl-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+              <div>
+                <h3 class="text-[1.1rem] font-bold leading-tight">{step.title}</h3>
+                <p class="text-[0.88rem] text-text-secondary leading-relaxed mt-1 max-w-[480px]">{step.desc}</p>
+              </div>
+              
+              {/* Desktop CTA */}
+              {step.action && (
+                <div class="hidden md:block shrink-0">
+                  <a
+                    href={step.action.href}
+                    class="inline-flex font-mono text-[0.72rem] text-nure-blue hover:underline whitespace-nowrap"
+                    {...(step.action.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+                  >
+                    {step.action.label}
+                  </a>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile CTA */}
+            {step.action && (
+              <a
+                href={step.action.href}
+                class="inline-block mt-3 md:hidden font-mono text-[0.72rem] text-nure-blue hover:underline"
+                {...(step.action.href.startsWith('http') ? { target: '_blank', rel: 'noopener' } : {})}
+              >
+                {step.action.label}
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+      <!-- ═══ REQUIREMENTS — Tabs ═══ -->
+      <section class="py-12 border-b border-border">
+        <div class="grid lg:grid-cols-[1fr_340px] gap-10 lg:gap-16">
+
+          <div id="requirements">
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Документи</div>
+            <h2 class="text-[1.5rem] font-bold tracking-tight mb-5">Вимоги до вступу</h2>
+
+            <!-- Tab buttons -->
+            <div class="flex gap-1 mb-5 border-b border-border" role="tablist" aria-label="Вимоги за категоріями">
+              {Object.values(requirements).map((req, i) => (
+                <button
+                  class={`req-tab font-mono text-[0.75rem] px-4 py-2.5 border-b-2 transition-all ${i === 0 ? 'border-nure-blue text-nure-blue font-semibold' : 'border-transparent text-text-muted hover:text-text-primary'}`}
+                  data-tab={req.id}
+                  role="tab"
+                  aria-selected={i === 0 ? 'true' : 'false'}
+                  aria-controls={`panel-${req.id}`}
+                >
+                  {req.title}
+                </button>
+              ))}
+            </div>
+
+            <!-- Tab panels -->
+            {Object.values(requirements).map((req, i) => (
+              <div
+                class={`req-panel ${i === 0 ? '' : 'hidden'}`}
+                id={`panel-${req.id}`}
+                data-panel={req.id}
+                role="tabpanel"
+              >
+                <div class="space-y-2 pl-1">
+                  {req.items.map((item, j) => (
+                    <div class="flex items-start gap-3 text-[0.88rem] text-text-secondary py-1">
+                      <span class="font-mono text-[0.65rem] text-text-muted mt-0.5 w-5 shrink-0 text-right">{String(j + 1).padStart(2, '0')}</span>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <!-- Sidebar: Key dates -->
+          <div>
+            <div class="bg-surface-sunken rounded-lg p-6 sticky top-24">
+              <div class="font-mono text-[0.65rem] text-text-muted uppercase tracking-[0.15em] mb-4">Ключові дати 2026</div>
+              <div class="space-y-0">
+                {dates.map(d => (
+                  <div class="flex gap-3 py-2.5 border-b border-border last:border-b-0">
+                    <span class="font-mono text-[0.75rem] font-semibold text-nure-blue w-20 shrink-0">{d.period}</span>
+                    <span class="text-[0.82rem] text-text-secondary">{d.event}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div class="mt-5 p-3 bg-nure-blue/[0.04] border border-nure-blue/10 rounded-md">
+                <div class="font-mono text-[0.65rem] text-nure-blue uppercase tracking-wide mb-1">Гаряча лінія</div>
+                <a href="tel:+380577021013" class="font-mono text-[0.85rem] font-semibold text-text-primary">+380 57 702 10 13</a>
+                <div class="text-[0.72rem] text-text-muted mt-0.5">Приймальна комісія, пн–пт 9:00–17:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ SPECIALTIES — AND filter ═══ -->
+      <section id="specialties" class="py-12">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Академічні програми</div>
+        <div class="flex flex-wrap items-end gap-4 mb-6">
+          <h2 class="text-[1.5rem] font-bold tracking-tight">Спеціальності</h2>
+          <span class="font-mono text-[0.72rem] text-text-muted" id="spec-count">{programs.length} програм</span>
+        </div>
+
+        <!-- Filter group 1: Degree -->
+        <div class="mb-3">
+          <div class="font-mono text-[0.65rem] text-text-muted uppercase tracking-wide mb-1.5">Ступінь</div>
+          <div class="flex flex-wrap gap-1.5" id="degree-filters" role="group" aria-label="Фільтр за ступенем">
+            <button class="filter-btn degree-btn active font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-degree="all" role="radio" aria-pressed="true">Усі</button>
+            <button class="filter-btn degree-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-degree="bachelor" role="radio" aria-pressed="false">Бакалаврат</button>
+            <button class="filter-btn degree-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-degree="master" role="radio" aria-pressed="false">Магістратура</button>
+            <button class="filter-btn degree-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-degree="phd" role="radio" aria-pressed="false">PhD</button>
+          </div>
+        </div>
+
+        <!-- Filter group 2: Faculty -->
+        <div class="mb-6">
+          <div class="font-mono text-[0.65rem] text-text-muted uppercase tracking-wide mb-1.5">Факультет</div>
+          <div class="flex flex-wrap gap-1.5" id="faculty-filters" role="group" aria-label="Фільтр за факультетом">
+            <button class="filter-btn faculty-btn active font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="all" role="radio" aria-pressed="true">Усі</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="КН" role="radio" aria-pressed="false">КН</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="КІ" role="radio" aria-pressed="false">КІ</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="КБ" role="radio" aria-pressed="false">КБ</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="ІКМ" role="radio" aria-pressed="false">ІКМ</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="АМ" role="radio" aria-pressed="false">АМ</button>
+            <button class="filter-btn faculty-btn font-mono text-[0.72rem] px-3 py-1.5 rounded-md border border-border transition-all" data-faculty="ЕБ" role="radio" aria-pressed="false">ЕБ</button>
+          </div>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" id="spec-grid">
+          {programs.map(prog => (
+            <a
+              href={`/applicants/specialties/${prog.code}`}
+              class="spec-card group border border-border rounded-lg p-5 hover:border-nure-blue hover:-translate-y-0.5 transition-all relative"
+              data-degrees={prog.degrees.join(',')}
+              data-faculty={prog.faculty}
+            >
+              <div class="flex items-center gap-2 mb-1">
+                <span class="font-mono text-[0.68rem] text-nure-blue tracking-wider">{prog.code}</span>
+                <span class="font-mono text-[0.58rem] text-text-muted">{prog.faculty}</span>
+              </div>
+              <h3 class="text-[0.95rem] font-semibold leading-snug mb-1.5">{prog.name.uk}</h3>
+              <div class="text-[0.78rem] text-text-muted">
+                {prog.degrees.map(d => degreeLabels[d]).join(' · ')}
+              </div>
+              <span class="absolute top-4 right-4 text-text-muted/30 group-hover:text-nure-blue transition-colors">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <!-- ═══ CONTACTS ═══ -->
+      <section id="contacts" class="py-10 border-t border-border">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Приймальна комісія</div>
+            <h2 class="text-[1.25rem] font-bold tracking-tight mb-3">Контакти</h2>
+            <div class="space-y-2 text-[0.9rem] text-text-secondary">
+              <p>пр. Науки, 14, корпус Д, кімната 105</p>
+              <p>Харків, 61166, Україна</p>
+              <p class="font-mono"><a href="tel:+380577021013" class="text-nure-blue">+380 57 702 10 13</a></p>
+              <p class="font-mono"><a href="mailto:admission@nure.ua" class="text-nure-blue">admission@nure.ua</a></p>
+              <p class="text-text-muted text-[0.82rem]">Пн–Пт: 9:00–17:00</p>
+            </div>
+          </div>
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Для іноземних студентів</div>
+            <h2 class="text-[1.25rem] font-bold tracking-tight mb-3">International Office</h2>
+            <div class="space-y-2 text-[0.9rem] text-text-secondary">
+              <p>пр. Науки, 14, корпус А, кімната 321</p>
+              <p class="font-mono"><a href="mailto:international@nure.ua" class="text-nure-blue">international@nure.ua</a></p>
+              <p class="text-text-muted text-[0.82rem]">English-speaking staff available</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .filter-btn { color: var(--color-text-muted); }
+  .filter-btn:hover { border-color: var(--color-nure-blue); color: var(--color-nure-blue); }
+  .filter-btn.active { background: var(--color-nure-blue); color: white; border-color: var(--color-nure-blue); }
+
+  .req-tab { cursor: pointer; }
+
+  /* Fade-in animation for filtered cards */
+  .spec-card { transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.15s ease; }
+  .spec-card.fade-out { opacity: 0; transform: scale(0.97); }
+  .spec-card.fade-in { opacity: 1; transform: scale(1); }
+</style>
+
+<script>
+  // ═══ AND-filter logic ═══
+  const degreeButtons = document.querySelectorAll('.degree-btn');
+  const facultyButtons = document.querySelectorAll('.faculty-btn');
+  const cards = document.querySelectorAll('.spec-card') as NodeListOf<HTMLElement>;
+  const counter = document.getElementById('spec-count');
+
+  let activeDegree = 'all';
+  let activeFaculty = 'all';
+
+  function applyFilters() {
+    let visible = 0;
+    cards.forEach(card => {
+      const degrees = card.dataset.degrees || '';
+      const faculty = card.dataset.faculty || '';
+
+      const degreeMatch = activeDegree === 'all' || degrees.includes(activeDegree);
+      const facultyMatch = activeFaculty === 'all' || faculty === activeFaculty;
+      const match = degreeMatch && facultyMatch;
+
+      if (match) {
+        card.classList.remove('fade-out');
+        card.classList.add('fade-in');
+        card.style.display = '';
+        visible++;
+      } else {
+        card.classList.remove('fade-in');
+        card.classList.add('fade-out');
+        // Hide after animation
+        setTimeout(() => {
+          if (card.classList.contains('fade-out')) {
+            card.style.display = 'none';
+          }
+        }, 200);
+      }
+    });
+    if (counter) counter.textContent = `${visible} програм`;
+  }
+
+  degreeButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeDegree = (btn as HTMLElement).dataset.degree!;
+      degreeButtons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      applyFilters();
+    });
+  });
+
+  facultyButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFaculty = (btn as HTMLElement).dataset.faculty!;
+      facultyButtons.forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed', 'false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed', 'true');
+      applyFilters();
+    });
+  });
+
+  // ═══ Tabs for requirements ═══
+  const tabs = document.querySelectorAll('.req-tab');
+  const panels = document.querySelectorAll('.req-panel');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = (tab as HTMLElement).dataset.tab;
+      tabs.forEach(t => {
+        t.classList.remove('border-nure-blue', 'text-nure-blue', 'font-semibold');
+        t.classList.add('border-transparent', 'text-text-muted');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tab.classList.add('border-nure-blue', 'text-nure-blue', 'font-semibold');
+      tab.classList.remove('border-transparent', 'text-text-muted');
+      tab.setAttribute('aria-selected', 'true');
+
+      panels.forEach(p => {
+        if ((p as HTMLElement).dataset.panel === target) {
+          p.classList.remove('hidden');
+        } else {
+          p.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

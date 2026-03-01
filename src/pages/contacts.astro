@@ -1,0 +1,148 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk' as const;
+
+const departments = [
+  {
+    title: 'Приймальна комісія',
+    address: 'пр. Науки, 14, корпус Д, кімната 105',
+    phone: '+380 57 702 10 13',
+    email: 'admission@nure.ua',
+    hours: 'Пн–Пт: 9:00–17:00 (під час вступної кампанії — Пн–Сб)',
+  },
+  {
+    title: 'Ректорат',
+    address: 'пр. Науки, 14, корпус А, кімната 204',
+    phone: '+380 57 702 10 13',
+    email: 'rector@nure.ua',
+    hours: 'Пн–Пт: 9:00–17:30',
+  },
+  {
+    title: 'Міжнародний відділ',
+    address: 'пр. Науки, 14, корпус А, кімната 321',
+    phone: '+380 57 702 14 54',
+    email: 'international@nure.ua',
+    hours: 'Пн–Пт: 9:00–17:00 · English-speaking staff',
+  },
+  {
+    title: 'Навчальний відділ',
+    address: 'пр. Науки, 14, корпус А, кімната 118',
+    phone: '+380 57 702 10 78',
+    email: 'education@nure.ua',
+    hours: 'Пн–Пт: 9:00–17:00',
+  },
+  {
+    title: 'Прес-служба',
+    address: 'пр. Науки, 14, корпус А',
+    phone: '+380 57 702 10 13',
+    email: 'press@nure.ua',
+    hours: 'Пн–Пт: 9:00–17:00',
+  },
+  {
+    title: 'Бібліотека',
+    address: 'пр. Науки, 14, корпус Б',
+    phone: '+380 57 702 15 98',
+    email: 'library@nure.ua',
+    hours: 'Пн–Пт: 8:00–18:00, Сб: 9:00–14:00',
+  },
+];
+
+const social = [
+  { name: 'Facebook', url: 'https://facebook.com/naborNURE' },
+  { name: 'Telegram', url: 'https://t.me/nure_official' },
+  { name: 'YouTube', url: 'https://youtube.com/@NURETV' },
+  { name: 'TikTok', url: 'https://tiktok.com/@nure_ua' },
+];
+---
+
+<BaseLayout lang={lang} title="Контакти — ХНУРЕ" description="Контактна інформація ХНУРЕ — адреса, телефони, email, графік роботи підрозділів.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Контакти</span>
+      </nav>
+
+      <div class="pb-10 border-b border-border">
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-4">Контакти</h1>
+        <div class="grid md:grid-cols-[1fr_auto] gap-6">
+          <p class="text-[1rem] text-text-secondary leading-relaxed max-w-[480px]">
+            Харківський національний університет радіоелектроніки<br>
+            пр. Науки, 14, Харків, 61166, Україна
+          </p>
+          <div class="flex flex-col gap-1">
+            <a href="tel:+380577021013" class="font-mono text-[1.1rem] text-nure-blue font-semibold">+380 57 702 10 13</a>
+            <a href="mailto:office@nure.ua" class="font-mono text-[0.85rem] text-nure-blue">office@nure.ua</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-16 py-12">
+
+        <div>
+          <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Підрозділи</div>
+          <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Контакти відділів</h2>
+          <div class="space-y-0">
+            {departments.map(d => (
+              <div class="grid md:grid-cols-[200px_1fr] gap-2 md:gap-6 py-4 border-b border-border">
+                <h3 class="text-[0.9rem] font-semibold">{d.title}</h3>
+                <div>
+                  <p class="text-[0.85rem] text-text-secondary mb-1">{d.address}</p>
+                  <div class="flex flex-wrap gap-x-4 gap-y-1">
+                    <a href={`tel:${d.phone.replace(/\s/g, '')}`} class="font-mono text-[0.78rem] text-nure-blue">{d.phone}</a>
+                    <a href={`mailto:${d.email}`} class="font-mono text-[0.78rem] text-nure-blue">{d.email}</a>
+                  </div>
+                  <p class="text-[0.75rem] text-text-muted mt-0.5">{d.hours}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="space-y-5">
+          <div class="rounded-xl overflow-hidden aspect-square bg-surface-sunken border border-border flex items-center justify-center">
+            <div class="text-center">
+              <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-wider mb-2">Карта</div>
+              <div class="text-[0.82rem] text-text-secondary">пр. Науки, 14</div>
+              <div class="text-[0.78rem] text-text-muted">Харків, Україна</div>
+              <a href="https://maps.google.com/?q=NURE+Kharkiv" target="_blank" rel="noopener" class="inline-block mt-3 font-mono text-[0.72rem] text-nure-blue hover:underline">
+                Відкрити на Google Maps →
+              </a>
+            </div>
+          </div>
+
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Соціальні мережі</div>
+            <div class="space-y-2">
+              {social.map(s => (
+                <a href={s.url} target="_blank" rel="noopener" class="flex items-center justify-between py-1.5 text-[0.85rem] hover:text-nure-blue transition-colors">
+                  <span>{s.name}</span>
+                  <span class="text-text-muted text-[0.72rem]">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Як дістатися</div>
+            <div class="space-y-2 text-[0.82rem] text-text-secondary">
+              <p><strong class="text-text-primary">Метро:</strong> ст. «Наукова» (600м)</p>
+              <p><strong class="text-text-primary">Тролейбус:</strong> №2, 3 — зуп. «ХНУРЕ»</p>
+              <p><strong class="text-text-primary">Автобус:</strong> №115, 147</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

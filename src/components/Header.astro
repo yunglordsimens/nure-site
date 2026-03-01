@@ -1,0 +1,280 @@
+---
+import type { Lang } from '../lib/i18n';
+import { t, getLocalePath } from '../lib/i18n';
+import { faculties } from '../lib/faculties';
+
+interface Props { lang?: Lang; }
+
+const { lang = 'uk' } = Astro.props;
+const altLang = lang === 'uk' ? 'en' : 'uk';
+const currentPath = Astro.url.pathname;
+const facultyList = Object.entries(faculties);
+---
+
+<a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-nure-blue focus:text-white focus:rounded-md focus:text-sm">
+  Перейти до контенту
+</a>
+
+<header id="site-header" class="fixed top-0 left-0 right-0 z-50 h-[72px] bg-surface border-b border-border transition-shadow duration-200">
+  <div class="max-w-[1320px] mx-auto h-full px-6 lg:px-8 flex items-center justify-between">
+
+    <a href={getLocalePath('/', lang)} class="flex items-center gap-3 no-underline group shrink-0">
+      <img src="/images/logo.svg" alt="ХНУРЕ" class="w-10 h-10 shrink-0 dark:hidden" onerror="this.outerHTML='<div class=\'w-10 h-10 bg-nure-blue rounded-[8px] flex items-center justify-center text-white font-extrabold text-base shrink-0\'>N</div>'" />
+      <img src="/images/logo-yellow.svg" alt="ХНУРЕ" class="w-10 h-10 shrink-0 hidden dark:block" onerror="this.style.display='none'" />
+      <div class="flex flex-col leading-tight">
+        <span class="font-bold text-[1.1rem] tracking-tight text-text-primary">{lang === 'uk' ? 'ХНУРЕ' : 'NURE'}</span>
+        <span class="text-[0.58rem] text-text-muted tracking-wide">{t('meta.university.full', lang)}</span>
+      </div>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-0" role="navigation" aria-label="Головна навігація">
+      <div class="relative" id="mega-trigger">
+        <button class="text-[0.84rem] font-medium text-text-secondary hover:text-nure-blue hover:bg-nure-blue-muted px-3 py-2 rounded-[4px] transition-all flex items-center gap-1" aria-expanded="false" aria-haspopup="true">
+          {t('nav.university', lang)}
+          <svg class="w-3 h-3 opacity-50 transition-transform" id="mega-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 9l6 6 6-6"/></svg>
+        </button>
+
+        <div id="mega-dropdown" class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[620px] bg-surface-raised border border-border rounded-lg shadow-lg p-5 hidden opacity-0 transition-opacity duration-150">
+          <div class="grid grid-cols-[1fr_1fr] gap-4">
+            <div>
+              <a href="/about" class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-nure-blue-muted transition-colors mb-2">
+                <span class="w-7 h-7 bg-nure-blue/10 rounded flex items-center justify-center text-nure-blue text-[0.65rem] font-bold">i</span>
+                <div>
+                  <div class="text-[0.82rem] font-semibold">Про університет</div>
+                  <div class="text-[0.68rem] text-text-muted">Історія, структура, рейтинги</div>
+                </div>
+              </a>
+              <a href="/contacts" class="flex items-center gap-2 px-3 py-2 rounded-md hover:bg-nure-blue-muted transition-colors">
+                <span class="w-7 h-7 bg-nure-blue/10 rounded flex items-center justify-center text-nure-blue text-[0.65rem] font-bold">@</span>
+                <div>
+                  <div class="text-[0.82rem] font-semibold">Контакти</div>
+                  <div class="text-[0.68rem] text-text-muted">Адреса, телефони, підрозділи</div>
+                </div>
+              </a>
+            </div>
+            <div>
+              <div class="font-mono text-[0.58rem] text-text-muted uppercase tracking-[0.15em] px-3 mb-2">Факультети</div>
+              {facultyList.map(([key, f]) => (
+                <a href={`/faculties/${key}`} class="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-nure-blue-muted transition-colors">
+                  <span class="font-mono text-[0.6rem] text-nure-blue w-6 shrink-0 font-semibold">{f.code}</span>
+                  <span class="text-[0.78rem] text-text-secondary">{f.name.uk}</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href={getLocalePath('/applicants', lang)} class="text-[0.84rem] font-medium text-text-secondary hover:text-nure-blue hover:bg-nure-blue-muted px-3 py-2 rounded-[4px] transition-all">{t('nav.applicants', lang)}</a>
+      <a href={getLocalePath('/students', lang)} class="text-[0.84rem] font-medium text-text-secondary hover:text-nure-blue hover:bg-nure-blue-muted px-3 py-2 rounded-[4px] transition-all">{t('nav.students', lang)}</a>
+      <a href={getLocalePath('/science', lang)} class="text-[0.84rem] font-medium text-text-secondary hover:text-nure-blue hover:bg-nure-blue-muted px-3 py-2 rounded-[4px] transition-all">{t('nav.science', lang)}</a>
+      <a href={getLocalePath('/news', lang)} class="text-[0.84rem] font-medium text-text-secondary hover:text-nure-blue hover:bg-nure-blue-muted px-3 py-2 rounded-[4px] transition-all">{t('nav.news', lang)}</a>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <button id="search-open" class="w-9 h-9 flex items-center justify-center rounded-md border border-border hover:border-nure-blue text-text-muted hover:text-nure-blue transition-all" aria-label="Пошук">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+
+      <button id="theme-toggle" class="w-9 h-9 flex items-center justify-center rounded-md border border-border hover:border-nure-blue text-text-muted hover:text-nure-blue transition-all text-sm" aria-label="Змінити тему">
+        <span class="dark:hidden">◐</span>
+        <span class="hidden dark:inline">☀</span>
+      </button>
+
+      <a href={getLocalePath(currentPath.replace('/en/', '/').replace('/en', '/'), altLang)} class="font-mono text-xs px-3 py-2 border border-border rounded-md text-text-muted hover:border-nure-blue hover:text-nure-blue transition-all">{t('nav.lang', lang)}</a>
+
+      <a href={getLocalePath('/applicants', lang)} class="hidden sm:inline-flex items-center gap-1 px-5 py-2.5 bg-nure-blue text-white text-[0.85rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-all">{t('nav.apply', lang)}</a>
+
+      <button id="mobile-menu-btn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-md hover:bg-surface-sunken transition-colors" aria-label="Меню">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div id="search-modal" class="fixed inset-0 z-[70] hidden">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" id="search-backdrop"></div>
+  <div class="relative max-w-[560px] mx-auto mt-[15vh] bg-surface-raised border border-border rounded-xl shadow-lg overflow-hidden">
+    <div class="flex items-center gap-3 px-5 py-4 border-b border-border">
+      <svg class="w-4 h-4 text-text-muted shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="search-input" type="text" placeholder="Пошук по сайту..." class="flex-1 bg-transparent text-[0.95rem] text-text-primary placeholder:text-text-muted outline-none" autocomplete="off" />
+      <kbd class="font-mono text-[0.6rem] text-text-muted border border-border rounded px-1.5 py-0.5">ESC</kbd>
+    </div>
+    <div id="search-results" class="max-h-[50vh] overflow-y-auto"></div>
+  </div>
+</div>
+
+<div id="mobile-menu" class="fixed inset-0 z-[60] bg-surface hidden flex-col pt-20 px-6 pb-8 overflow-y-auto">
+  <button id="mobile-menu-close" class="absolute top-5 right-5 w-10 h-10 flex items-center justify-center" aria-label="Закрити">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+  </button>
+
+  <nav class="flex flex-col gap-1">
+    <a href="/about" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Про університет</a>
+    <div class="py-2 pl-4 space-y-1">
+      {facultyList.map(([key, f]) => (
+        <a href={`/faculties/${key}`} class="block text-[0.88rem] text-text-secondary py-1.5 hover:text-nure-blue transition-colors">
+          <span class="font-mono text-[0.65rem] text-nure-blue mr-2">{f.code}</span>{f.name.uk}
+        </a>
+      ))}
+    </div>
+    <a href="/applicants" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Абітурієнтам</a>
+    <a href="/students" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Студентам</a>
+    <a href="/science" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Наука</a>
+    <a href="/news" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Новини</a>
+    <a href="/contacts" class="text-xl font-semibold py-3 border-b border-border hover:text-nure-blue transition-colors">Контакти</a>
+  </nav>
+
+  <a href="/applicants" class="mt-8 text-center py-3.5 bg-nure-blue text-white font-semibold rounded-xl text-base">Вступити →</a>
+</div>
+
+<div class="h-[72px]"></div>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  const close = document.getElementById('mobile-menu-close');
+
+  btn?.addEventListener('click', () => {
+    menu?.classList.remove('hidden');
+    menu?.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+  });
+
+  const closeMenu = () => {
+    menu?.classList.add('hidden');
+    menu?.classList.remove('flex');
+    document.body.style.overflow = '';
+  };
+
+  close?.addEventListener('click', closeMenu);
+  menu?.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  const header = document.getElementById('site-header');
+  window.addEventListener('scroll', () => {
+    header?.classList.toggle('shadow-md', window.scrollY > 20);
+  });
+
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const html = document.documentElement;
+    html.classList.toggle('dark');
+    localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+  });
+
+  // Mega-menu
+  const trigger = document.getElementById('mega-trigger');
+  const dropdown = document.getElementById('mega-dropdown');
+  const chevron = document.getElementById('mega-chevron');
+  let megaTimeout: ReturnType<typeof setTimeout>;
+
+  function openMega() {
+    clearTimeout(megaTimeout);
+    dropdown?.classList.remove('hidden');
+    setTimeout(() => dropdown?.classList.remove('opacity-0'), 10);
+    chevron?.classList.add('rotate-180');
+    trigger?.querySelector('button')?.setAttribute('aria-expanded', 'true');
+  }
+
+  function closeMega() {
+    megaTimeout = setTimeout(() => {
+      dropdown?.classList.add('opacity-0');
+      setTimeout(() => dropdown?.classList.add('hidden'), 150);
+      chevron?.classList.remove('rotate-180');
+      trigger?.querySelector('button')?.setAttribute('aria-expanded', 'false');
+    }, 100);
+  }
+
+  trigger?.addEventListener('mouseenter', openMega);
+  trigger?.addEventListener('mouseleave', closeMega);
+  dropdown?.addEventListener('mouseenter', () => clearTimeout(megaTimeout));
+  dropdown?.addEventListener('mouseleave', closeMega);
+  trigger?.querySelector('button')?.addEventListener('click', () => {
+    if (dropdown?.classList.contains('hidden')) openMega();
+    else closeMega();
+  });
+
+  // Search
+  const searchModal = document.getElementById('search-modal');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchResults = document.getElementById('search-results');
+  const searchBackdrop = document.getElementById('search-backdrop');
+
+  const searchIndex = [
+    { title: 'Головна', url: '/', tags: 'хнуре nure головна main' },
+    { title: 'Про університет', url: '/about', tags: 'про about історія history факультети' },
+    { title: 'Абітурієнтам', url: '/applicants', tags: 'абітурієнт вступ admission apply документи' },
+    { title: 'Студентам', url: '/students', tags: 'студент розклад schedule стипендія гуртожиток moodle' },
+    { title: 'Наука', url: '/science', tags: 'наука research scopus публікації phd аспірантура' },
+    { title: 'Новини', url: '/news', tags: 'новини news рейтинги' },
+    { title: 'Контакти', url: '/contacts', tags: 'контакти contacts телефон email адреса' },
+    { title: 'Факультети', url: '/faculties', tags: 'факультети faculties список' },
+    { title: '121 Інженерія ПЗ', url: '/applicants/specialties/121', tags: 'програмна інженерія software engineering' },
+    { title: '122 Комп\'ютерні науки', url: '/applicants/specialties/122', tags: 'компютерні науки computer science ai' },
+    { title: '123 Комп\'ютерна інженерія', url: '/applicants/specialties/123', tags: 'комп\'ютерна інженерія hardware embedded fpga' },
+    { title: '124 Системний аналіз', url: '/applicants/specialties/124', tags: 'системний аналіз data analyst business' },
+    { title: '125 Кібербезпека', url: '/applicants/specialties/125', tags: 'кібербезпека cybersecurity захист' },
+    { title: '126 Інформаційні системи', url: '/applicants/specialties/126', tags: 'інформаційні системи erp бази даних' },
+    { title: '151 Автоматизація', url: '/applicants/specialties/151', tags: 'автоматизація робототехніка iot plc scada' },
+    { title: '163 Біомедична інженерія', url: '/applicants/specialties/163', tags: 'біомедична медицина прилади' },
+    { title: '171 Електроніка', url: '/applicants/specialties/171', tags: 'електроніка мікроелектроніка схемотехніка' },
+    { title: '172 Телекомунікації', url: '/applicants/specialties/172', tags: 'телекомунікації радіотехніка 5g мережі' },
+    { title: 'Факультет КН', url: '/faculties/kn', tags: 'комп\'ютерних наук програмна інженерія' },
+    { title: 'Факультет КІ', url: '/faculties/ki', tags: 'комп\'ютерної інженерії управління' },
+    { title: 'Факультет ІКМ', url: '/faculties/ikm', tags: 'інфокомунікацій телекомунікації радіо' },
+    { title: 'Факультет КБ', url: '/faculties/kb', tags: 'комп\'ютерної безпеки кібербезпека' },
+    { title: 'Факультет АМ', url: '/faculties/am', tags: 'автоматики робототехніка iot' },
+    { title: 'Факультет ЕБ', url: '/faculties/eb', tags: 'електроніки біомедичної' },
+    { title: 'QS Rankings 2026', url: '/news/nure-qs-europe-2026', tags: 'qs рейтинг ranking europe' },
+    { title: 'Розклад занять', url: 'https://cist.nure.ua/', tags: 'розклад schedule cist' },
+    { title: 'ЄДЕБО', url: 'https://cabinet.edbo.gov.ua/', tags: 'єдебо edbo кабінет' },
+    { title: 'Бібліотека', url: '/students#library', tags: 'бібліотека library книги' },
+    { title: 'Erasmus+', url: '/students#mobility', tags: 'erasmus обмін exchange мобільність' },
+    { title: 'Карта кампусу', url: '/campus', tags: 'карта campus корпуси будівлі map' },
+    { title: 'Календар подій', url: '/events', tags: 'події calendar хакатон конференція' },
+    { title: 'Розклад занять', url: '/schedule', tags: 'розклад schedule cist пари' },
+  ];
+
+  function openSearch() {
+    searchModal?.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => searchInput?.focus(), 50);
+  }
+
+  function closeSearch() {
+    searchModal?.classList.add('hidden');
+    document.body.style.overflow = '';
+    if (searchInput) searchInput.value = '';
+    if (searchResults) searchResults.innerHTML = '';
+  }
+
+  document.getElementById('search-open')?.addEventListener('click', openSearch);
+  searchBackdrop?.addEventListener('click', closeSearch);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !['INPUT','TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) { e.preventDefault(); openSearch(); }
+    if (e.key === 'Escape') closeSearch();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
+  });
+
+  searchInput?.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase().trim();
+    if (!q || q.length < 2) { if (searchResults) searchResults.innerHTML = ''; return; }
+
+    const matches = searchIndex.filter(item =>
+      item.title.toLowerCase().includes(q) || item.tags.includes(q)
+    ).slice(0, 8);
+
+    if (searchResults) {
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="px-5 py-8 text-center text-[0.85rem] text-text-muted">Нічого не знайдено</div>';
+      } else {
+        searchResults.innerHTML = matches.map(m =>
+          `<a href="${m.url}" class="flex items-center gap-3 px-5 py-3 hover:bg-nure-blue-muted transition-colors border-b border-border last:border-b-0">
+            <span class="text-[0.88rem] text-text-primary font-medium">${m.title}</span>
+            <span class="ml-auto font-mono text-[0.65rem] text-text-muted">${m.url}</span>
+          </a>`
+        ).join('');
+      }
+    }
+  });
+</script>

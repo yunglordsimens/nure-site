@@ -1,0 +1,97 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { mockGroups, mockLessons, groupByDay, getTypeLabel } from '../lib/schedule';
+
+const lang = 'uk' as const;
+const schedule = groupByDay(mockLessons, lang);
+---
+
+<BaseLayout lang={lang} title="Розклад занять — ХНУРЕ" description="Розклад занять ХНУРЕ. Оберіть групу для перегляду.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <a href="/students" class="hover:text-nure-blue transition-colors">Студентам</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Розклад</span>
+      </nav>
+
+      <div class="pb-8 border-b border-border">
+        <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-3">Розклад занять</h1>
+        <p class="text-[0.95rem] text-text-secondary max-w-[480px]">Оберіть групу для перегляду розкладу. Дані оновлюються з системи CIST.</p>
+      </div>
+
+      <div class="py-6 flex flex-wrap gap-3 items-center border-b border-border">
+        <label for="group-select" class="font-mono text-[0.7rem] text-text-muted uppercase tracking-wide">Група:</label>
+        <select id="group-select" class="bg-surface-raised border border-border rounded-lg px-4 py-2.5 text-[0.88rem] font-mono focus:border-nure-blue focus:outline-none transition-colors min-w-[180px]">
+          {mockGroups.map(g => (
+            <option value={g.id} selected={g.name === 'ПЗПІ-23-1'}>{g.name} ({g.faculty})</option>
+          ))}
+        </select>
+        <div class="flex gap-1.5 ml-auto">
+          <button class="week-btn active font-mono text-[0.7rem] px-3 py-1.5 rounded-md border border-border transition-all" data-week="1">Тиждень 1</button>
+          <button class="week-btn font-mono text-[0.7rem] px-3 py-1.5 rounded-md border border-border transition-all" data-week="2">Тиждень 2</button>
+        </div>
+      </div>
+
+      <div class="py-6 space-y-6" id="schedule-grid">
+        {schedule.map(day => (
+          <div class="border border-border rounded-lg overflow-hidden">
+            <div class="bg-surface-sunken px-5 py-3 border-b border-border">
+              <h2 class="text-[0.92rem] font-bold">{day.dayName}</h2>
+            </div>
+            <div class="divide-y divide-border">
+              {day.lessons.map(lesson => {
+                const t = getTypeLabel(lesson.type, lang);
+                return (
+                  <div class="grid grid-cols-[80px_1fr_auto] gap-4 px-5 py-3 items-center">
+                    <div class="font-mono text-[0.78rem] text-text-muted">
+                      {lesson.startTime}<br/><span class="text-[0.65rem]">{lesson.endTime}</span>
+                    </div>
+                    <div>
+                      <div class="text-[0.88rem] font-medium">{lesson.subject}</div>
+                      <div class="text-[0.75rem] text-text-muted mt-0.5">{lesson.teacher}</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class={`font-mono text-[0.6rem] px-2 py-0.5 rounded ${t.color}`}>{t.uk}</span>
+                      <span class="font-mono text-[0.68rem] text-text-muted">{lesson.building}-{lesson.room}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="py-8 border-t border-border text-center">
+        <p class="text-[0.82rem] text-text-muted mb-3">Повний розклад доступний у системі CIST</p>
+        <a href="https://cist.nure.ua" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-5 py-2.5 bg-nure-blue text-white text-[0.85rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-all">Відкрити CIST ↗</a>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>
+
+<style>
+  .week-btn { color: var(--color-text-muted); }
+  .week-btn:hover { border-color: var(--color-nure-blue); color: var(--color-nure-blue); }
+  .week-btn.active { background: var(--color-nure-blue); color: white; border-color: var(--color-nure-blue); }
+</style>
+
+<script>
+  document.querySelectorAll('.week-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>

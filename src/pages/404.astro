@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout lang="uk" title="404 — Сторінку не знайдено — ХНУРЕ">
+  <Header lang="uk" />
+
+  <main class="px-6 lg:px-8" id="main-content">
+    <div class="max-w-[1320px] mx-auto py-24 text-center">
+      <div class="font-mono text-[6rem] font-extrabold text-nure-blue/10 leading-none mb-4">404</div>
+      <h1 class="text-[1.75rem] font-extrabold tracking-tight mb-3">Сторінку не знайдено</h1>
+      <p class="text-[0.95rem] text-text-secondary mb-8 max-w-[400px] mx-auto">
+        Ця сторінка не існує або була переміщена. Скористайтеся навігацією або пошуком.
+      </p>
+      <div class="flex items-center justify-center gap-3">
+        <a href="/" class="px-5 py-2.5 bg-nure-blue text-white text-[0.88rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-all">На головну</a>
+        <a href="/contacts" class="px-5 py-2.5 border border-border text-[0.88rem] font-medium rounded-md hover:border-nure-blue hover:text-nure-blue transition-all">Контакти</a>
+      </div>
+    </div>
+  </main>
+
+  <Footer lang="uk" />
+</BaseLayout>

@@ -1,0 +1,59 @@
+---
+import type { Lang } from '../lib/i18n';
+import { getLocalePath } from '../lib/i18n';
+
+interface Props { lang?: Lang; }
+const { lang = 'uk' } = Astro.props;
+---
+
+<section class="relative overflow-hidden pt-16 pb-20 md:pt-20 md:pb-24 px-6 lg:px-8">
+  <div class="max-w-[1320px] mx-auto grid lg:grid-cols-[1.15fr_0.85fr] gap-12 lg:gap-20 items-end">
+    <div class="relative z-10">
+      <div class="inline-flex items-center gap-2 font-mono text-[0.68rem] tracking-wide text-nure-blue border border-nure-blue-border px-3 py-1.5 rounded-[3px] mb-8">
+        <span class="w-[5px] h-[5px] rounded-[1px] bg-nure-blue animate-pulse"></span>
+        QS Europe 2026 · Scopus · THE Rankings
+      </div>
+      <div class="font-mono text-[0.78rem] text-nure-steel tracking-wide mb-3">
+        {lang === 'uk' ? 'Харків · з 1930 року · радіоелектроніка, IT, кібербезпека' : 'Kharkiv · est. 1930 · radio electronics, IT, cybersecurity'}
+      </div>
+      <h1 class="text-[clamp(2.25rem,4.2vw,3.4rem)] font-extrabold leading-[1.08] tracking-tight text-text-primary mb-6 text-balance">
+        {lang === 'uk' ? 'Інженерна школа,' : 'Engineering school,'}<br />
+        {lang === 'uk' ? 'де ' : 'where '}<span class="text-nure-blue">{lang === 'uk' ? 'технології працюють' : 'technology works'}</span>
+      </h1>
+      <p class="text-base text-text-secondary leading-relaxed max-w-[500px] mb-10">
+        {lang === 'uk'
+          ? 'ХНУРЕ готує інженерів, яких наймають EPAM, GlobalLogic і Microsoft. Прикладні IT, радіоелектроніка, автоматизація — не теорія заради теорії, а системи, що працюють у реальному світі.'
+          : "NURE trains engineers hired by EPAM, GlobalLogic, and Microsoft. Applied IT, radio electronics, automation — not theory for theory's sake, but systems that work in the real world."}
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3">
+        <a href={getLocalePath('/applicants', lang)} class="inline-flex items-center justify-center gap-2 px-7 py-3 bg-nure-blue text-white text-[0.9rem] font-semibold rounded-md hover:bg-nure-blue-hover hover:-translate-y-0.5 hover:shadow-[0_4px_16px_rgba(0,55,166,0.2)] transition-all">
+          {lang === 'uk' ? 'Спеціальності' : 'Programs'} →
+        </a>
+        <a href="#" class="inline-flex items-center justify-center gap-2 px-7 py-3 border border-border-strong text-text-primary text-[0.9rem] font-medium rounded-md hover:border-nure-blue hover:text-nure-blue transition-all">
+          {lang === 'uk' ? 'Віртуальний тур' : 'Virtual Tour'}
+        </a>
+      </div>
+    </div>
+    <div class="relative max-w-[500px] lg:max-w-none">
+      <div class="rounded-xl overflow-hidden aspect-[4/3] relative bg-gradient-to-br from-[#111128] via-[#0f2240] to-[#0a1a30]">
+        <img src="/images/hero.webp" alt={lang === 'uk' ? 'Головний корпус ХНУРЕ' : 'NURE main building'} class="w-full h-full object-cover" loading="eager" onerror="this.style.display='none'" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"></div>
+        <div class="absolute bottom-4 left-5 right-5 z-10">
+          <span class="font-mono text-[0.6rem] text-white/50 tracking-wide">
+            {lang === 'uk' ? 'пр. Науки, 14 · Харків · Україна' : 'Nauky Ave, 14 · Kharkiv · Ukraine'}
+          </span>
+        </div>
+      </div>
+      <div class="absolute -bottom-3 -left-3 bg-surface border border-border rounded-md p-3 hidden sm:block">
+        <div class="font-mono text-[0.5rem] text-text-muted uppercase tracking-widest">Рейтинг QS Europe</div>
+        <div class="font-mono font-semibold text-base text-text-primary leading-none mt-1">2026</div>
+        <div class="text-[0.68rem] text-text-muted mt-0.5">{lang === 'uk' ? 'серед найкращих в Європі' : 'among the best in Europe'}</div>
+      </div>
+      <div class="absolute top-3 -right-3 bg-surface border border-border rounded-md p-3 hidden sm:block">
+        <div class="font-mono text-[0.5rem] text-text-muted uppercase tracking-widest">{lang === 'uk' ? 'Випускників у IT' : 'IT graduates'}</div>
+        <div class="font-mono font-semibold text-base text-text-primary leading-none mt-1">90%+</div>
+        <div class="text-[0.68rem] text-text-muted mt-0.5">{lang === 'uk' ? 'працевлаштування' : 'employment rate'}</div>
+      </div>
+    </div>
+  </div>
+</section>

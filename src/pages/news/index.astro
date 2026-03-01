@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { articles } from '../../lib/articles';
+import { formatDate } from '../../lib/api';
+
+const lang = 'uk' as const;
+const tagLabels: Record<string, string> = { rankings: 'Рейтинги', science: 'Наука', events: 'Події', university: 'Університет' };
+const allArticles = Object.values(articles).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const featured = allArticles[0];
+const rest = allArticles.slice(1);
+---
+
+<BaseLayout lang={lang} title="Новини — ХНУРЕ" description="Останні новини ХНУРЕ.">
+  <Header lang={lang} />
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span><span class="text-text-primary">Новини</span>
+      </nav>
+      <div class="pb-10 border-b border-border">
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-3">Новини</h1>
+        <p class="text-[1rem] text-text-secondary max-w-[480px]">Рейтинги, наукові досягнення, події та життя університету.</p>
+      </div>
+      <a href={`/news/${featured.slug}`} class="block group mt-10 mb-8">
+        <div class="grid lg:grid-cols-[1.2fr_1fr] gap-8 items-center">
+          <div class="rounded-xl overflow-hidden aspect-[2/1] bg-gradient-to-br from-[#111128] via-[#0f2240] to-[#0a1a30] relative">
+            <div class="absolute inset-0 flex items-center justify-center"><span class="text-white/[0.05] text-3xl font-extrabold">ХНУРЕ</span></div>
+          </div>
+          <div>
+            <div class="flex items-center gap-3 mb-3">
+              <span class="font-mono text-[0.68rem] tracking-wider uppercase px-2.5 py-1 rounded-[3px] border border-nure-blue-border text-nure-blue">{tagLabels[featured.tag]}</span>
+              <span class="font-mono text-[0.72rem] text-text-muted">{formatDate(featured.date, lang)}</span>
+            </div>
+            <h2 class="text-[1.35rem] font-bold leading-snug tracking-tight mb-2 group-hover:text-nure-blue transition-colors">{featured.title.uk}</h2>
+            <p class="text-[0.9rem] text-text-secondary leading-relaxed">{featured.excerpt.uk}</p>
+          </div>
+        </div>
+      </a>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 py-8 border-t border-border">
+        {rest.map(article => (
+          <a href={`/news/${article.slug}`} class="group border border-border rounded-lg p-5 hover:border-nure-blue hover:-translate-y-0.5 transition-all">
+            <div class="flex items-center gap-2 mb-3">
+              <span class="font-mono text-[0.58rem] tracking-wider uppercase text-nure-blue">{tagLabels[article.tag]}</span>
+              <span class="font-mono text-[0.68rem] text-text-muted">{formatDate(article.date, lang)}</span>
+            </div>
+            <h3 class="text-[0.95rem] font-semibold leading-snug mb-1.5 group-hover:text-nure-blue transition-colors">{article.title.uk}</h3>
+            <p class="text-[0.82rem] text-text-muted leading-relaxed">{article.excerpt.uk}</p>
+          </a>
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer lang={lang} />
+</BaseLayout>

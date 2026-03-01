@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk' as const;
+
+const buildings = [
+  { code: 'А', name: 'Головний корпус', address: 'пр. Науки, 14', faculties: ['КІ', 'ІКМ', 'АМ', 'ЕБ'], floors: 5, features: ['Ректорат', 'Актова зала', 'Приймальна комісія'] },
+  { code: 'Б', name: 'Корпус Б', address: 'пр. Науки, 14-Б', faculties: [], floors: 4, features: ['Бібліотека', 'Читальний зал', 'Видавничий центр'] },
+  { code: 'В', name: 'Корпус В', address: 'пр. Науки, 14-В', faculties: [], floors: 3, features: ['Мовний центр', 'Кафедра фізвиховання', 'Спортзал'] },
+  { code: 'Д', name: 'Корпус Д', address: 'вул. Бакуліна, 14', faculties: ['КН', 'КБ'], floors: 6, features: ['Комп\'ютерні лабораторії', 'Коворкінг', 'Їдальня'] },
+  { code: 'І', name: 'Корпус І', address: 'вул. Маршала Бажанова, 17', faculties: [], floors: 4, features: ['Гуртожиток №1', 'Студентське кафе'] },
+];
+---
+
+<BaseLayout lang={lang} title="Кампус — ХНУРЕ" description="Корпуси, гуртожитки та інфраструктура кампусу ХНУРЕ у Харкові.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <a href="/about" class="hover:text-nure-blue transition-colors">Університет</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Кампус</span>
+      </nav>
+
+      <div class="pb-8 border-b border-border">
+        <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-3">Кампус</h1>
+        <p class="text-[0.95rem] text-text-secondary max-w-[520px]">
+          Кампус ХНУРЕ розташований у науковому центрі Харкова — на проспекті Науки. 5 навчальних корпусів, бібліотека, спортивний комплекс та гуртожитки.
+        </p>
+      </div>
+
+      <div class="py-8">
+        <div class="bg-surface-sunken rounded-xl p-6 mb-8 border border-border">
+          <div class="aspect-[16/7] bg-surface rounded-lg flex items-center justify-center border border-border overflow-hidden relative">
+            <div class="text-center">
+              <div class="font-mono text-[0.65rem] text-text-muted uppercase tracking-wide mb-2">Інтерактивна карта</div>
+              <p class="text-[0.82rem] text-text-muted max-w-[300px]">Карта буде підключена після інтеграції з Google Maps API або OpenStreetMap</p>
+              <a href="https://maps.app.goo.gl/rKmrCx6w7i7Y6dQQ9" target="_blank" rel="noopener" class="inline-flex items-center gap-1 mt-3 px-4 py-2 bg-nure-blue text-white text-[0.78rem] font-semibold rounded-md hover:bg-nure-blue-hover transition-all">
+                Відкрити Google Maps ↗
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Інфраструктура</div>
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-6">Корпуси</h2>
+
+        <div class="space-y-4">
+          {buildings.map(b => (
+            <div class="grid md:grid-cols-[80px_1fr_200px] gap-4 items-start border border-border rounded-lg p-5 hover:border-nure-blue/30 transition-colors">
+              <div class="text-[2rem] font-extrabold text-nure-blue/20">{b.code}</div>
+              <div>
+                <h3 class="text-[1rem] font-bold mb-1">{b.name}</h3>
+                <div class="text-[0.82rem] text-text-secondary mb-2">{b.address}</div>
+                {b.faculties.length > 0 && (
+                  <div class="flex flex-wrap gap-1.5 mb-2">
+                    {b.faculties.map(f => (
+                      <span class="font-mono text-[0.6rem] px-2 py-0.5 bg-nure-blue/10 text-nure-blue rounded">{f}</span>
+                    ))}
+                  </div>
+                )}
+                <div class="flex flex-wrap gap-2">
+                  {b.features.map(f => (
+                    <span class="text-[0.72rem] text-text-muted">{f}</span>
+                  ))}
+                </div>
+              </div>
+              <div class="font-mono text-[0.72rem] text-text-muted">
+                {b.floors} поверхів
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <section class="py-8 border-t border-border">
+        <h2 class="text-[1.1rem] font-bold mb-4">Як дістатися</h2>
+        <div class="grid md:grid-cols-2 gap-6 text-[0.88rem] text-text-secondary">
+          <div>
+            <div class="font-semibold text-text-primary mb-1">Метро</div>
+            <p>Станція «Наукова» (лінія 2) — 5 хвилин пішки до головного корпусу.</p>
+          </div>
+          <div>
+            <div class="font-semibold text-text-primary mb-1">Автобус/Тролейбус</div>
+            <p>Зупинка «Проспект Науки» — маршрути №35, 40, 47, тролейбуси №2, 3.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

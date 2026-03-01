@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getAllSlugs, getArticle, articles } from '../../lib/articles';
+import { formatDate } from '../../lib/api';
+
+export function getStaticPaths() {
+  return getAllSlugs().map(slug => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const article = getArticle(slug!);
+if (!article) return Astro.redirect('/404');
+
+const lang = 'uk' as const;
+const tagLabels: Record<string, string> = { rankings: 'Рейтинги', science: 'Наука', events: 'Події', university: 'Університет' };
+const related = (article.related || []).map(s => articles[s]).filter(Boolean).slice(0, 2);
+---
+
+<BaseLayout lang={lang} title={`${article.title.uk} — ХНУРЕ`} description={article.excerpt.uk}>
+  <Header lang={lang} />
+  <main id="main-content" class="px-6 lg:px-8">
+    <article class="max-w-[1320px] mx-auto">
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <a href="/news" class="hover:text-nure-blue transition-colors">Новини</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">{tagLabels[article.tag]}</span>
+      </nav>
+
+      <div class="max-w-[720px] pb-8">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="font-mono text-[0.68rem] tracking-wider uppercase px-2.5 py-1 rounded-[3px] border border-nure-blue-border text-nure-blue">{tagLabels[article.tag]}</span>
+          <span class="font-mono text-[0.72rem] text-text-muted">{formatDate(article.date, lang)}</span>
+        </div>
+        <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.15] tracking-tight mb-4">{article.title.uk}</h1>
+        <p class="text-[1.05rem] text-text-secondary leading-relaxed">{article.excerpt.uk}</p>
+      </div>
+
+      {article.image && (
+        <div class="mb-10 rounded-xl overflow-hidden aspect-[2/1] bg-gradient-to-br from-[#111128] via-[#0f2240] to-[#0a1a30] relative">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <span class="text-white/[0.06] text-3xl font-extrabold tracking-wider">ХНУРЕ</span>
+          </div>
+          {article.imageCaption && (
+            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/50 to-transparent p-4">
+              <span class="font-mono text-[0.68rem] text-white/60">{article.imageCaption.uk}</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div class="grid lg:grid-cols-[1fr_280px] gap-10 lg:gap-16 pb-12">
+        <div class="max-w-[680px] [&>p]:text-[0.95rem] [&>p]:text-text-secondary [&>p]:leading-[1.8] [&>p]:mb-5 [&>ul]:my-4 [&>ul]:pl-6 [&>ul>li]:text-[0.92rem] [&>ul>li]:text-text-secondary [&>ul>li]:leading-relaxed [&>ul>li]:mb-2 [&_strong]:text-text-primary [&_strong]:font-semibold" set:html={article.content.uk} />
+
+        <aside class="space-y-5">
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Поділитися</div>
+            <div class="flex gap-2">
+              <a href="#" class="flex-1 text-center py-2 border border-border rounded-md text-[0.78rem] text-text-muted hover:border-nure-blue hover:text-nure-blue transition-colors">Telegram</a>
+              <a href="#" class="flex-1 text-center py-2 border border-border rounded-md text-[0.78rem] text-text-muted hover:border-nure-blue hover:text-nure-blue transition-colors">Facebook</a>
+            </div>
+          </div>
+          {related.length > 0 && (
+            <div class="bg-surface-sunken rounded-lg p-5">
+              <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Пов'язані новини</div>
+              <div class="space-y-3">
+                {related.map(r => (
+                  <a href={`/news/${r.slug}`} class="block group">
+                    <div class="font-mono text-[0.6rem] text-text-muted mb-0.5">{formatDate(r.date, lang)}</div>
+                    <div class="text-[0.82rem] font-medium leading-snug group-hover:text-nure-blue transition-colors">{r.title.uk}</div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+          <a href="/news" class="block text-center py-2.5 border border-border rounded-md text-[0.82rem] text-text-muted hover:border-nure-blue hover:text-nure-blue transition-colors">← Усі новини</a>
+        </aside>
+      </div>
+    </article>
+  </main>
+  <Footer lang={lang} />
+</BaseLayout>

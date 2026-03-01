@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { faculties } from '../../lib/faculties';
+
+const lang = 'uk' as const;
+const facultyList = Object.entries(faculties);
+---
+
+<BaseLayout lang={lang} title="Факультети — ХНУРЕ" description="6 факультетів ХНУРЕ — комп'ютерні науки, кібербезпека, телекомунікації, автоматика, електроніка.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Факультети</span>
+      </nav>
+
+      <div class="pb-10 border-b border-border">
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-4">Факультети</h1>
+        <p class="text-[1rem] text-text-secondary leading-relaxed max-w-[520px]">
+          ХНУРЕ має 6 факультетів, які охоплюють IT, кібербезпеку, телекомунікації, автоматизацію, електроніку та біомедичну інженерію.
+        </p>
+      </div>
+
+      <div class="py-10 space-y-4">
+        {facultyList.map(([key, f]) => (
+          <a href={`/faculties/${key}`} class="group grid md:grid-cols-[100px_1fr_200px] gap-4 md:gap-6 items-center border border-border rounded-lg p-6 hover:border-nure-blue hover:-translate-y-0.5 transition-all">
+            <div class="font-mono text-[1.75rem] font-extrabold text-nure-blue/20 group-hover:text-nure-blue/40 transition-colors">{f.code}</div>
+            <div>
+              <h2 class="text-[1.1rem] font-bold tracking-tight mb-1">{f.fullName.uk}</h2>
+              <p class="text-[0.85rem] text-text-secondary line-clamp-2">{f.description.uk}</p>
+            </div>
+            <div class="flex flex-wrap gap-3 text-[0.78rem] text-text-muted font-mono">
+              <span>{f.departments.length} кафедр</span>
+              <span>{f.specialties.length} спец.</span>
+              <span>Корп. {f.building}</span>
+            </div>
+          </a>
+        ))}
+      </div>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

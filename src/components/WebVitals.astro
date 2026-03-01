@@ -1,0 +1,94 @@
+---
+/**
+ * Web Vitals monitoring — tracks CLS, FID, LCP, FCP, TTFB.
+ * Logs to console in dev, can POST to analytics endpoint in production.
+ * Add <WebVitals /> before </body> in BaseLayout.
+ */
+---
+
+<script>
+  function trackWebVitals() {
+    if (typeof PerformanceObserver === 'undefined') return;
+
+    const vitals: Record<string, number> = {};
+
+    // LCP — Largest Contentful Paint
+    try {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const last = entries[entries.length - 1] as any;
+        vitals.lcp = Math.round(last.startTime);
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+    } catch {}
+
+    // FID — First Input Delay
+    try {
+      new PerformanceObserver((list) => {
+        const entry = list.getEntries()[0] as any;
+        vitals.fid = Math.round(entry.processingStart - entry.startTime);
+      }).observe({ type: 'first-input', buffered: true });
+    } catch {}
+
+    // CLS — Cumulative Layout Shift
+    try {
+      let cls = 0;
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries() as any[]) {
+          if (!entry.hadRecentInput) cls += entry.value;
+        }
+        vitals.cls = Math.round(cls * 1000) / 1000;
+      }).observe({ type: 'layout-shift', buffered: true });
+    } catch {}
+
+    // FCP — First Contentful Paint
+    try {
+      new PerformanceObserver((list) => {
+        const entry = list.getEntries()[0];
+        vitals.fcp = Math.round(entry.startTime);
+      }).observe({ type: 'paint', buffered: true });
+    } catch {}
+
+    // TTFB — Time to First Byte
+    try {
+      const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (nav) vitals.ttfb = Math.round(nav.responseStart);
+    } catch {}
+
+    // Report after page fully loaded
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const nav = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+        if (nav) vitals.ttfb = Math.round(nav.responseStart);
+
+        // Performance budget checks
+        const budgets = { lcp: 2500, fid: 100, cls: 0.1, fcp: 1800, ttfb: 800 };
+        const violations: string[] = [];
+
+        for (const [key, limit] of Object.entries(budgets)) {
+          if (vitals[key] !== undefined && vitals[key] > limit) {
+            violations.push(`${key.toUpperCase()}: ${vitals[key]} (budget: ${limit})`);
+          }
+        }
+
+        if (import.meta.env.DEV) {
+          console.log('%c[Web Vitals]', 'color: #0037A6; font-weight: bold', vitals);
+          if (violations.length > 0) {
+            console.warn('%c[Performance Budget Exceeded]', 'color: #C0392B', violations.join(', '));
+          }
+        }
+
+        // POST to analytics in production
+        // const analyticsUrl = import.meta.env.PUBLIC_ANALYTICS_URL;
+        // if (analyticsUrl && !import.meta.env.DEV) {
+        //   navigator.sendBeacon(analyticsUrl, JSON.stringify({
+        //     url: window.location.pathname,
+        //     vitals,
+        //     timestamp: Date.now(),
+        //   }));
+        // }
+      }, 3000);
+    });
+  }
+
+  trackWebVitals();
+</script>

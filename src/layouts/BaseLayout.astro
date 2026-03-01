@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import type { Lang } from '../lib/i18n';
+import { t } from '../lib/i18n';
+import BackToTop from '../components/BackToTop.astro';
+import WebVitals from '../components/WebVitals.astro';
+
+interface Props { title?: string; description?: string; lang?: Lang; }
+
+const {
+  title = t('meta.title', Astro.props.lang),
+  description = t('meta.description', Astro.props.lang),
+  lang = 'uk',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={`https://nure.ua${Astro.url.pathname}`} />
+  <meta property="og:image" content="https://nure.ua/images/hero.webp" />
+  <meta property="og:locale" content={lang === 'uk' ? 'uk_UA' : 'en_US'} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <title>{title}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="icon" type="image/svg+xml" href="/images/logo.svg" />
+
+  <link rel="alternate" hreflang="uk" href={`https://nure.ua${Astro.url.pathname.replace('/en/', '/')}`} />
+  <link rel="alternate" hreflang="en" href={`https://nure.ua/en${Astro.url.pathname.replace('/en/', '/')}`} />
+
+  <script is:inline>
+    if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    "name": lang === 'uk' ? "Харківський національний університет радіоелектроніки" : "Kharkiv National University of Radio Electronics",
+    "alternateName": lang === 'uk' ? "ХНУРЕ" : "NURE",
+    "url": "https://nure.ua",
+    "address": { "@type": "PostalAddress", "streetAddress": "пр. Науки, 14", "addressLocality": "Харків", "postalCode": "61166", "addressCountry": "UA" },
+    "telephone": "+380577021013",
+    "email": "info@nure.ua"
+  })} />
+</head>
+<body>
+  <slot />
+  <BackToTop />
+  <WebVitals />
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('fade-visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-in-up').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

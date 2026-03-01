@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getAllFacultyCodes, getFaculty, faculties } from '../../lib/faculties';
+import { getAllSpecialtyCodes, getSpecialty } from '../../lib/specialties';
+
+export function getStaticPaths() {
+  return getAllFacultyCodes().map(code => ({ params: { code } }));
+}
+
+const { code } = Astro.params;
+const faculty = getFaculty(code!);
+if (!faculty) return Astro.redirect('/404');
+
+const lang = 'uk' as const;
+const specs = faculty.specialties.map(c => getSpecialty(c)).filter(Boolean);
+---
+
+<BaseLayout lang={lang} title={`${faculty.fullName.uk} — ХНУРЕ`} description={faculty.description.uk}>
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <a href="/about" class="hover:text-nure-blue transition-colors">Університет</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">{faculty.code}</span>
+      </nav>
+
+      <div class="grid lg:grid-cols-[1fr_320px] gap-10 lg:gap-16 pb-12 border-b border-border">
+        <div>
+          <div class="font-mono text-[0.72rem] text-nure-blue tracking-wide mb-2">Факультет {faculty.code}</div>
+          <h1 class="text-[clamp(1.75rem,3.5vw,2.5rem)] font-extrabold leading-[1.1] tracking-tight mb-4">{faculty.fullName.uk}</h1>
+          <p class="text-[0.95rem] text-text-secondary leading-relaxed">{faculty.description.uk}</p>
+        </div>
+
+        <div class="bg-surface-sunken rounded-lg p-6 h-fit">
+          <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-4">Контакти</div>
+          <div class="space-y-2.5 text-[0.85rem] text-text-secondary">
+            <div>
+              <div class="text-[0.72rem] text-text-muted">Декан</div>
+              <div class="font-medium text-text-primary">{faculty.dean}</div>
+            </div>
+            <div>
+              <div class="text-[0.72rem] text-text-muted">Адреса</div>
+              <div>Корпус {faculty.building}, кім. {faculty.room}</div>
+            </div>
+            <div class="font-mono text-nure-blue">{faculty.email}</div>
+            <div class="font-mono text-nure-blue">{faculty.phone}</div>
+          </div>
+        </div>
+      </div>
+
+      <section class="py-10 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Структура</div>
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-6">Кафедри</h2>
+        <div class="space-y-0">
+          {faculty.departments.map(d => (
+            <div class="grid md:grid-cols-[80px_1fr_auto] gap-2 md:gap-6 py-4 border-b border-border">
+              <span class="font-mono text-[0.75rem] text-nure-blue font-semibold">{d.code}</span>
+              <div>
+                <h3 class="text-[0.92rem] font-semibold">{d.name.uk}</h3>
+                {d.head && <div class="text-[0.78rem] text-text-muted mt-0.5">Завідувач: {d.head}</div>}
+              </div>
+              <div class="flex gap-3 items-center">
+                {d.email && <a href={`mailto:${d.email}`} class="font-mono text-[0.72rem] text-nure-blue hover:underline">{d.email}</a>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {specs.length > 0 && (
+        <section class="py-10">
+          <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Навчання</div>
+          <h2 class="text-[1.25rem] font-bold tracking-tight mb-6">Спеціальності факультету</h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {specs.map(s => s && (
+              <a href={`/applicants/specialties/${s.code}`} class="group border border-border rounded-lg p-5 hover:border-nure-blue hover:-translate-y-0.5 transition-all relative">
+                <div class="font-mono text-[0.65rem] text-nure-blue tracking-wider mb-1">{s.code}</div>
+                <h3 class="text-[0.92rem] font-semibold leading-snug mb-1">{s.name.uk}</h3>
+                <div class="text-[0.78rem] text-text-muted">{s.degrees.map(d => d === 'bachelor' ? 'Бакалаврат' : d === 'master' ? 'Магістратура' : 'PhD').join(' · ')}</div>
+                <span class="absolute top-4 right-4 text-text-muted/30 group-hover:text-nure-blue transition-colors">↗</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

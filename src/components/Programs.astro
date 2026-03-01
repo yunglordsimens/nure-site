@@ -1,0 +1,50 @@
+---
+import type { Lang } from '../lib/i18n';
+import { t, getLocalePath } from '../lib/i18n';
+import { programs } from '../lib/api';
+
+interface Props { lang?: Lang; }
+const { lang = 'uk' } = Astro.props;
+
+const degreeLabels: Record<string, Record<string, string>> = {
+  uk: { bachelor: 'Бакалаврат', master: 'Магістратура', phd: 'PhD' },
+  en: { bachelor: "Bachelor's", master: "Master's", phd: 'PhD' },
+};
+---
+
+<section class="py-16 md:py-20 px-6 lg:px-8 bg-surface-dark text-text-inverse fade-in-up">
+  <div class="max-w-[1320px] mx-auto">
+    <div class="flex items-end justify-between mb-8">
+      <div>
+        <div class="font-mono text-[0.65rem] text-[#6da3ff] tracking-[0.15em] uppercase mb-2">
+          {t('programs.label', lang)}
+        </div>
+        <h2 class="text-[1.75rem] font-bold tracking-tight text-white">{t('programs.title', lang)}</h2>
+      </div>
+      <a href={getLocalePath('/applicants', lang)} class="hidden sm:flex items-center gap-1 text-[#6da3ff] text-[0.85rem] font-medium hover:gap-2 transition-all no-underline">
+        {t('programs.all', lang)}
+      </a>
+    </div>
+
+    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      {programs.map(prog => (
+        <a
+          href={getLocalePath(`/applicants/specialties/${prog.code}`, lang)}
+          class="group relative border border-white/10 rounded-2xl p-6 no-underline text-white hover:border-nure-blue hover:bg-nure-blue/5 hover:-translate-y-1 transition-all duration-300"
+        >
+          <div class="font-mono text-[0.65rem] text-nure-blue tracking-wider mb-2">{prog.code}</div>
+
+          <h3 class="text-[1.1rem] font-semibold leading-snug mb-2">{prog.name[lang]}</h3>
+
+          <div class="text-[0.78rem] text-white/50">
+            {prog.degrees.map(d => degreeLabels[lang][d]).join(' · ')}
+          </div>
+
+          <span class="absolute top-5 right-5 text-white/20 group-hover:text-nure-blue group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all">
+            ↗
+          </span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>

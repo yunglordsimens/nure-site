@@ -1,0 +1,22 @@
+<button
+  id="back-to-top"
+  class="fixed bottom-6 right-6 z-40 w-10 h-10 bg-surface-raised border border-border rounded-full shadow-md flex items-center justify-center text-text-muted hover:text-nure-blue hover:border-nure-blue transition-all opacity-0 pointer-events-none"
+  aria-label="Повернутися нагору"
+>
+  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" d="M18 15l-6-6-6 6"/></svg>
+</button>
+
+<script>
+  const btn = document.getElementById('back-to-top');
+  window.addEventListener('scroll', () => {
+    if (!btn) return;
+    if (window.scrollY > 600) {
+      btn.style.opacity = '1';
+      btn.style.pointerEvents = 'auto';
+    } else {
+      btn.style.opacity = '0';
+      btn.style.pointerEvents = 'none';
+    }
+  });
+  btn?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+</script>

@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const lang = 'uk' as const;
+
+const researchAreas = [
+  { code: 'ІТ', title: 'Інформаційні технології', desc: 'Штучний інтелект, машинне навчання, обробка даних, хмарні обчислення' },
+  { code: 'КБ', title: 'Кібербезпека', desc: 'Криптографія, захист інформації, аналіз вразливостей, мережева безпека' },
+  { code: 'РЕ', title: 'Радіоелектроніка', desc: 'Антенні системи, НВЧ-техніка, радіолокація, телекомунікації' },
+  { code: 'АТ', title: 'Автоматизація', desc: 'Робототехніка, IoT, вбудовані системи, промислова автоматизація' },
+  { code: 'БІ', title: 'Біомедична інженерія', desc: 'Медичні прилади, обробка біосигналів, телемедицина' },
+  { code: 'МН', title: 'Математичне моделювання', desc: 'Обчислювальна математика, оптимізація, чисельні методи' },
+];
+
+const publications = [
+  { metric: '850+', label: 'публікацій у Scopus', period: '2020–2025' },
+  { metric: '120+', label: 'публікацій у Web of Science', period: '2020–2025' },
+  { metric: '45', label: 'h-індекс університету', period: 'Scopus' },
+  { metric: '12', label: 'наукових журналів', period: 'ХНУРЕ' },
+];
+
+const labs = [
+  { name: 'Лабораторія штучного інтелекту', faculty: 'Факультет КН', focus: 'Deep learning, NLP, computer vision' },
+  { name: 'Центр кібербезпеки', faculty: 'Факультет КБ', focus: 'Penetration testing, криптоаналіз' },
+  { name: 'Лабораторія IoT та вбудованих систем', faculty: 'Факультет АМ', focus: 'ARM, FPGA, протоколи IoT' },
+  { name: 'Радіотехнічна лабораторія', faculty: 'Факультет ІКМ', focus: 'SDR, антенні системи, 5G' },
+  { name: 'Лабораторія біомедичної електроніки', faculty: 'Факультет ЕБ', focus: 'ЕКГ, ЕЕГ, медичні прилади' },
+  { name: 'Центр високопродуктивних обчислень', faculty: 'Факультет КІ', focus: 'HPC, CUDA, паралельні алгоритми' },
+];
+---
+
+<BaseLayout lang={lang} title="Наука — ХНУРЕ" description="Наукова діяльність ХНУРЕ — дослідження, публікації, лабораторії, PhD програми, журнал Scopus.">
+  <Header lang={lang} />
+
+  <main id="main-content" class="px-6 lg:px-8">
+    <div class="max-w-[1320px] mx-auto">
+
+      <nav class="pt-6 pb-8 font-mono text-[0.7rem] text-text-muted">
+        <a href="/" class="hover:text-nure-blue transition-colors">ХНУРЕ</a>
+        <span class="mx-1.5">/</span>
+        <span class="text-text-primary">Наука</span>
+      </nav>
+
+      <div class="pb-10 border-b border-border">
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-4">Наука та дослідження</h1>
+        <p class="text-[1rem] text-text-secondary leading-relaxed max-w-[560px]">
+          ХНУРЕ — один з провідних дослідницьких університетів України в галузі IT, радіоелектроніки та кібербезпеки. Публікації у Scopus, Web of Science, власний науковий журнал категорії А.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 py-10 border-b border-border">
+        {publications.map(p => (
+          <div class="bg-surface-sunken rounded-lg p-5">
+            <div class="font-mono text-[1.5rem] font-bold text-nure-blue leading-none">{p.metric}</div>
+            <div class="text-[0.82rem] text-text-secondary mt-1">{p.label}</div>
+            <div class="font-mono text-[0.6rem] text-text-muted mt-0.5">{p.period}</div>
+          </div>
+        ))}
+      </div>
+
+      <section class="py-12 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Напрями</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Наукові напрями</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {researchAreas.map(r => (
+            <div class="border border-border rounded-lg p-5">
+              <div class="font-mono text-[0.65rem] text-nure-blue tracking-wider mb-1">{r.code}</div>
+              <h3 class="text-[0.95rem] font-semibold mb-1.5">{r.title}</h3>
+              <p class="text-[0.82rem] text-text-muted leading-relaxed">{r.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-12 border-b border-border">
+        <div class="grid lg:grid-cols-[1fr_380px] gap-10 lg:gap-16">
+          <div>
+            <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Журнал</div>
+            <h2 class="text-[1.35rem] font-bold tracking-tight mb-4">ITSSI — журнал у Scopus</h2>
+            <p class="text-[0.92rem] text-text-secondary leading-relaxed mb-3">
+              «Innovative Technologies and Scientific Solutions for Industries» (ITSSI) — науковий журнал ХНУРЕ, індексований у Scopus та включений до переліку фахових видань категорії А.
+            </p>
+            <p class="text-[0.88rem] text-text-secondary leading-relaxed mb-4">
+              Журнал публікує дослідження у галузях інформаційних технологій, телекомунікацій, кібербезпеки, радіоелектроніки та автоматизації. Відкритий доступ, рецензування.
+            </p>
+            <div class="flex gap-3">
+              <a href="https://itssi.nure.ua" target="_blank" rel="noopener" class="font-mono text-[0.78rem] text-nure-blue hover:underline">itssi.nure.ua ↗</a>
+            </div>
+          </div>
+
+          <div class="bg-surface-sunken rounded-lg p-6">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-4">Метрики журналу</div>
+            <div class="space-y-3">
+              <div class="flex justify-between py-2 border-b border-border">
+                <span class="text-[0.85rem] text-text-secondary">Scopus</span>
+                <span class="font-mono text-[0.82rem] font-semibold text-nure-blue">Indexed</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-border">
+                <span class="text-[0.85rem] text-text-secondary">Категорія НАК</span>
+                <span class="font-mono text-[0.82rem] font-semibold text-nure-blue">А</span>
+              </div>
+              <div class="flex justify-between py-2 border-b border-border">
+                <span class="text-[0.85rem] text-text-secondary">Рік заснування</span>
+                <span class="font-mono text-[0.82rem]">2017</span>
+              </div>
+              <div class="flex justify-between py-2">
+                <span class="text-[0.85rem] text-text-secondary">Періодичність</span>
+                <span class="font-mono text-[0.82rem]">4 рази на рік</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-12 border-b border-border">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Інфраструктура</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-6">Наукові лабораторії</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          {labs.map(l => (
+            <div class="border border-border rounded-lg p-5">
+              <h3 class="text-[0.92rem] font-semibold mb-1">{l.name}</h3>
+              <div class="font-mono text-[0.65rem] text-nure-blue mb-1.5">{l.faculty}</div>
+              <p class="text-[0.78rem] text-text-muted">{l.focus}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="py-12">
+        <div class="font-mono text-[0.68rem] text-nure-blue tracking-[0.15em] uppercase mb-1.5">Аспірантура</div>
+        <h2 class="text-[1.35rem] font-bold tracking-tight mb-4">PhD програми</h2>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div>
+            <p class="text-[0.92rem] text-text-secondary leading-relaxed mb-3">
+              ХНУРЕ пропонує аспірантуру (PhD) за кількома спеціальностями. Термін навчання — 4 роки. Фінансування: державний бюджет або контракт.
+            </p>
+            <div class="space-y-2 text-[0.85rem] text-text-secondary">
+              <p>122 Комп'ютерні науки</p>
+              <p>172 Телекомунікації та радіотехніка</p>
+              <p>151 Автоматизація та комп'ютерно-інтегровані технології</p>
+              <p>171 Електроніка</p>
+            </div>
+          </div>
+          <div class="bg-surface-sunken rounded-lg p-6">
+            <div class="font-mono text-[0.6rem] text-text-muted uppercase tracking-[0.15em] mb-3">Контакти аспірантури</div>
+            <div class="space-y-2 text-[0.85rem] text-text-secondary">
+              <p>Відділ аспірантури та докторантури</p>
+              <p>пр. Науки, 14, корпус А, кімната 410</p>
+              <p class="font-mono text-nure-blue">phd@nure.ua</p>
+              <p class="font-mono text-nure-blue">+380 57 702 13 91</p>
+              <p class="text-text-muted text-[0.78rem]">Пн–Пт: 9:00–17:00</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer lang={lang} />
+</BaseLayout>

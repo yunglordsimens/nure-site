@@ -1,0 +1,278 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const lang = 'uk' as const;
+
+const completed = [
+  { name: 'Аудит поточного сайту nure.ua', detail: '10 критичних проблем задокументовано' },
+  { name: 'Архітектура', detail: 'Astro 5 SSG + Headless WordPress REST API' },
+  { name: 'Дизайн-система', detail: 'Кольори, типографіка Inter Tight + IBM Plex Mono, відступи, радіуси' },
+  { name: 'i18n маршрутизація', detail: 'UA/EN з автоматичними шляхами' },
+  { name: 'Головна сторінка', detail: 'UA + EN версії, hero, stats, програми, heritage блок, партнери, новини, CTA' },
+  { name: 'Дизайн-ітерації', detail: 'v1 → v2 → v3: шрифти, кольори, копі, layout' },
+  { name: 'Шаблон спеціальності', detail: '3 спеціальності: 121, 122, 125 з кар\'єрою, компетенціями, дисциплінами' },
+  { name: 'Шаблон новини', detail: '3 статті з prose-стилями, sidebar, пов\'язані' },
+  { name: 'Список новин', detail: 'Хронологічний перелік з тегами' },
+  { name: 'Admission flow', detail: '5-кроковий процес вступу, вимоги, дати, контакти комісії' },
+  { name: 'Про університет', detail: 'Історія, факультети, місія, рейтинги, партнери' },
+  { name: 'Контакти', detail: '6 підрозділів, карта, соцмережі, транспорт' },
+  { name: 'Студентам', detail: 'Розклад, ЄДЕБО, бібліотека, гуртожитки, ресурси' },
+  { name: 'Темна тема', detail: 'Системна + ручна, збереження в localStorage' },
+  { name: 'Наука', detail: 'Дослідження, публікації, лабораторії, журнал Scopus, PhD' },
+  { name: 'Schema.org розмітка', detail: 'EducationalOrganization для SEO' },
+  { name: 'WordPress API клієнт', detail: 'Mock-дані, готовий до підключення' },
+  { name: 'Шаблон факультету', detail: '6 факультетів з кафедрами, деканом, контактами' },
+  { name: 'Mega-menu навігація', detail: 'Dropdown з факультетами та швидким доступом' },
+  { name: 'Глобальний пошук', detail: 'Client-side, Cmd+K / /, 20+ індексованих сторінок' },
+  { name: 'Фільтрація спеціальностей', detail: 'AND-фільтр: ступінь × факультет, aria-pressed, fade-анімація' },
+  { name: 'SEO', detail: 'sitemap.xml, robots.txt, hreflang, structured data' },
+  { name: 'Accessibility', detail: 'Skip-nav, focus-visible, ARIA labels, semantic HTML' },
+  { name: '404 сторінка', detail: 'Кастомна сторінка помилки' },
+  { name: 'WordPress API клієнт', detail: 'Mock↔live одним .env прапорцем' },
+  { name: 'Webhook auto-rebuild', detail: 'POST /api/webhook з верифікацією' },
+  { name: 'Web Vitals моніторинг', detail: 'LCP, FID, CLS, FCP, TTFB + performance budget' },
+  { name: 'Карта кампусу', detail: '5 корпусів, транспорт, Google Maps link' },
+  { name: 'Календар подій', detail: '8 подій, 5 типів (academic/admission/science/culture/sport)' },
+  { name: 'Розклад занять', detail: 'CIST API клієнт, mock groups/lessons, groupByDay' },
+  { name: 'Skeleton loaders', detail: 'text, card, image, table-row варіанти' },
+  { name: 'Документація', detail: 'Контент-менеджер + deployment guide' },
+];
+
+const pages = [
+  { url: '/', name: 'Головна (UA)', type: 'page' },
+  { url: '/en/', name: 'Головна (EN)', type: 'page' },
+  { url: '/about', name: 'Про університет', type: 'page' },
+  { url: '/applicants', name: 'Абітурієнтам — Admission Flow', type: 'page' },
+  { url: '/applicants/specialties/121', name: '121 Інженерія ПЗ', type: 'template' },
+  { url: '/applicants/specialties/122', name: '122 Комп\'ютерні науки', type: 'template' },
+  { url: '/applicants/specialties/125', name: '125 Кібербезпека', type: 'template' },
+  { url: '/news', name: 'Новини — список', type: 'page' },
+  { url: '/news/nure-qs-europe-2026', name: 'Стаття: QS Europe 2026', type: 'template' },
+  { url: '/news/the-natural-sciences', name: 'Стаття: THE Rankings', type: 'template' },
+  { url: '/news/scopus-journal', name: 'Стаття: Scopus', type: 'template' },
+  { url: '/students', name: 'Студентам', type: 'page' },
+  { url: '/science', name: 'Наука та дослідження', type: 'page' },
+  { url: '/contacts', name: 'Контакти', type: 'page' },
+  { url: '/faculties', name: 'Факультети — список', type: 'page' },
+  { url: '/faculties/kn', name: 'Факультет КН', type: 'template' },
+  { url: '/faculties/ki', name: 'Факультет КІ', type: 'template' },
+  { url: '/faculties/ikm', name: 'Факультет ІКМ', type: 'template' },
+  { url: '/faculties/kb', name: 'Факультет КБ', type: 'template' },
+  { url: '/faculties/am', name: 'Факультет АМ', type: 'template' },
+  { url: '/faculties/eb', name: 'Факультет ЕБ', type: 'template' },
+  { url: '/applicants/specialties/123', name: '123 Комп\'ютерна інженерія', type: 'template' },
+  { url: '/applicants/specialties/124', name: '124 Системний аналіз', type: 'template' },
+  { url: '/applicants/specialties/126', name: '126 Інформаційні системи', type: 'template' },
+  { url: '/applicants/specialties/151', name: '151 Автоматизація', type: 'template' },
+  { url: '/applicants/specialties/163', name: '163 Біомедична інженерія', type: 'template' },
+  { url: '/applicants/specialties/171', name: '171 Електроніка', type: 'template' },
+  { url: '/applicants/specialties/172', name: '172 Телекомунікації', type: 'template' },
+  { url: '/campus', name: 'Карта кампусу', type: 'page' },
+  { url: '/events', name: 'Календар подій', type: 'page' },
+  { url: '/schedule', name: 'Розклад занять', type: 'page' },
+  { url: '/docs', name: 'Документація CMS', type: 'page' },
+];
+
+const techStack = [
+  { name: 'Astro 5', role: 'Static site generator' },
+  { name: 'TypeScript', role: 'Типізація' },
+  { name: 'Tailwind CSS 4', role: 'Стилі' },
+  { name: 'WordPress REST API', role: 'CMS backend' },
+  { name: 'Inter Tight', role: 'Основний шрифт' },
+  { name: 'IBM Plex Mono', role: 'Моноширинний' },
+];
+
+const metrics = [
+  { label: 'Lighthouse Performance', value: '95+', note: 'target' },
+  { label: 'Lighthouse Accessibility', value: '95+', note: 'target' },
+  { label: 'JavaScript bundle', value: '<10KB', note: 'vs ~500KB поточний' },
+  { label: 'First Contentful Paint', value: '<1s', note: 'vs 3-6s поточний' },
+  { label: 'Сторінок', value: '35+', note: 'UA + EN + dynamic' },
+  { label: 'Шаблонів', value: '3', note: 'спеціальність, новина, факультет' },
+];
+
+const phases = [
+  {
+    num: 1, title: 'Фаза 1 — Frontend Foundation', status: 'done',
+    items: [
+      'Головна сторінка UA + EN',
+      'Шаблон спеціальності',
+      'Шаблон новини + список новин',
+      'Admission flow (абітурієнтам)',
+      'Про університет',
+      'Студентам',
+      'Контакти',
+      'Дизайн-система + темна тема',
+      'i18n маршрутизація',
+      'WordPress API клієнт (mock)',
+    ],
+  },
+  {
+    num: 2, title: 'Фаза 2 — Content & Infrastructure', status: 'done',
+    items: [
+      'Шаблон факультету (6 факультетів)',
+      'Mega-menu з факультетами',
+      'Глобальний пошук (Cmd+K)',
+      'Фільтрація спеціальностей',
+      '10 спеціальностей з деталями',
+      'OG meta для соцмереж',
+      'SEO: sitemap.xml + robots.txt',
+      'Accessibility: skip-nav, focus, ARIA',
+      'Back-to-top кнопка',
+      '404 сторінка',
+    ],
+  },
+  {
+    num: 3, title: 'Фаза 3 — Infrastructure & Integration', status: 'done',
+    items: [
+      'WordPress API клієнт (mock↔live через PUBLIC_USE_MOCK)',
+      'Webhook auto-rebuild (/api/webhook, Vercel Deploy Hook)',
+      'CIST Schedule API клієнт з mock fallback',
+      'Сторінка розкладу з вибором групи',
+      '.env.example з усіма конфігами',
+      'Документація для контент-менеджерів (/docs)',
+      'Hybrid SSR (Astro output: hybrid)',
+    ],
+  },
+  {
+    num: 4, title: 'Фаза 4 — Polish & UX', status: 'done',
+    items: [
+      'Карта кампусу (5 корпусів, транспорт)',
+      'Календар подій (8 подій, типи, кольори)',
+      'Events data layer з getUpcoming/getByMonth',
+      'Skeleton loaders (text/card/image/table-row)',
+      'Breadcrumb компонент з Schema.org',
+      'OG + Twitter meta для соцмереж',
+      'Applicants: AND-фільтр (ступінь × факультет) з aria-pressed',
+      'Applicants: Hero CTA (Подати заяву + Спеціальності)',
+      'Applicants: Timeline-коннектор у кроках',
+      'Applicants: Таби для вимог (Бакалаврат/Магістр/Іноземці)',
+      'Applicants: Мобільні CTA у кожному кроці',
+      'Applicants: Fade-анімація карток при фільтрації',
+      'Global: мін. розмір mono caps 0.68rem (з 0.62rem)',
+    ],
+  },
+  {
+    num: 5, title: 'Фаза 5 — Launch (потребує університет)', status: 'next',
+    items: [
+      'Підключення до live WordPress API',
+      'Реальний контент та фотографії',
+      'DNS перемикання nure.ua',
+      'SSL сертифікат',
+      'Навчання контент-менеджерів',
+      'Monitoring в production',
+    ],
+  },
+];
+---
+
+<BaseLayout lang={lang} title="Аудит та прогрес — Редизайн ХНУРЕ">
+  <div class="min-h-screen bg-surface dark:bg-surface-dark text-text-primary dark:text-text-inverse">
+
+    <div class="max-w-[960px] mx-auto px-6 py-12">
+
+      <div class="mb-12">
+        <div class="font-mono text-[0.65rem] text-nure-blue tracking-[0.15em] uppercase mb-2">Редизайн nure.ua</div>
+        <h1 class="text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-[1.1] tracking-tight mb-3">
+          Аудит та прогрес проєкту
+        </h1>
+        <p class="text-[0.95rem] text-text-secondary dark:text-white/60 leading-relaxed max-w-[560px]">
+          Повний редизайн сайту Харківського національного університету радіоелектроніки. Сучасний frontend на Astro 5 з headless WordPress як CMS.
+        </p>
+        <div class="font-mono text-[0.72rem] text-text-muted dark:text-white/30 mt-3">Березень 2026 · Фази 1–4 завершені</div>
+      </div>
+
+      <section class="mb-12 pb-10 border-b border-border dark:border-white/10">
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-1">Архітектура</h2>
+        <p class="text-[0.88rem] text-text-secondary dark:text-white/50 mb-6">WordPress (існуючий) → REST API → Astro SSG → CDN</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {techStack.map(t => (
+            <div class="border border-border dark:border-white/10 rounded-lg p-3">
+              <div class="text-[0.88rem] font-semibold">{t.name}</div>
+              <div class="text-[0.72rem] text-text-muted dark:text-white/40">{t.role}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mb-12 pb-10 border-b border-border dark:border-white/10">
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-1">Метрики</h2>
+        <p class="text-[0.82rem] text-text-muted dark:text-white/40 mb-6">Порівняння з поточним сайтом nure.ua</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {metrics.map(m => (
+            <div class="bg-surface-sunken dark:bg-white/5 rounded-lg p-4">
+              <div class="font-mono text-[1.5rem] font-bold text-nure-blue leading-none">{m.value}</div>
+              <div class="text-[0.78rem] text-text-secondary dark:text-white/60 mt-1">{m.label}</div>
+              <div class="text-[0.65rem] text-text-muted dark:text-white/30 font-mono">{m.note}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mb-12 pb-10 border-b border-border dark:border-white/10">
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-1">Виконано</h2>
+        <p class="text-[0.82rem] text-text-muted dark:text-white/40 mb-6">{completed.length} завдань завершено</p>
+        <div class="space-y-0">
+          {completed.map((item, i) => (
+            <div class="grid grid-cols-[24px_1fr] gap-3 py-2.5 border-b border-border dark:border-white/5">
+              <span class="font-mono text-[0.65rem] text-nure-blue mt-0.5">✓</span>
+              <div>
+                <span class="text-[0.88rem] font-medium">{item.name}</span>
+                <span class="text-[0.78rem] text-text-muted dark:text-white/40 ml-2">{item.detail}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section class="mb-12 pb-10 border-b border-border dark:border-white/10">
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-6">Усі сторінки</h2>
+        <div class="space-y-0">
+          {pages.map(p => (
+            <a href={p.url} class="grid grid-cols-[1fr_auto] gap-4 py-3 border-b border-border dark:border-white/5 hover:text-nure-blue transition-colors group">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-[0.6rem] text-text-muted dark:text-white/30 uppercase w-16 shrink-0">{p.type === 'template' ? 'шаблон' : 'сторінка'}</span>
+                <span class="text-[0.88rem] font-medium">{p.name}</span>
+              </div>
+              <span class="font-mono text-[0.72rem] text-text-muted group-hover:text-nure-blue">{p.url}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-[1.25rem] font-bold tracking-tight mb-6">Дорожня карта</h2>
+        <div class="space-y-6">
+          {phases.map(phase => (
+            <div class="border border-border dark:border-white/10 rounded-lg p-5">
+              <div class="flex items-center gap-3 mb-3">
+                <span class:list={[
+                  "font-mono text-[0.6rem] tracking-wider uppercase px-2 py-0.5 rounded",
+                  phase.status === 'done' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : '',
+                  phase.status === 'next' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' : '',
+                  phase.status === 'future' ? 'bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40' : '',
+                ]}>
+                  {phase.status === 'done' ? 'завершено' : phase.status === 'next' ? 'наступна' : 'плановано'}
+                </span>
+                <h3 class="text-[1rem] font-bold">{phase.title}</h3>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-x-6 gap-y-1">
+                {phase.items.map(item => (
+                  <div class="flex items-center gap-2 py-1 text-[0.82rem] text-text-secondary dark:text-white/50">
+                    <span class="text-[0.6rem] text-text-muted">{phase.status === 'done' ? '✓' : '○'}</span>
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <div class="text-center py-8">
+        <div class="font-mono text-[0.6rem] text-text-muted dark:text-white/20 tracking-wider uppercase">ХНУРЕ Redesign · 2026</div>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>
