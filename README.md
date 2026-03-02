@@ -70,8 +70,8 @@ This is an ongoing initiative structured for a formal handover to the university
 
 ```bash
 # Clone and install dependencies
-git clone [https://github.com/yunglordsimens/khnure-redesign.git](https://github.com/yunglordsimens/khnure-redesign.git)
-cd khnure-redesign
+git clone [https://github.com/yunglordsimens/nure-site.git](https://github.com/yunglordsimens/khnure-redesign.git)
+cd nure-site
 npm install
 
 # Setup environment (Toggle PUBLIC_USE_MOCK=true/false)
